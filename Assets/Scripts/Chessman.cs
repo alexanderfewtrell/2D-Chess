@@ -57,4 +57,5 @@ public class Chessman : MonoBehaviour
 
         this.transform.position = new Vector3(x, y, -1.0f);
     }
+
 }
