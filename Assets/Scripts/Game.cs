@@ -106,6 +106,11 @@ public class Game : MonoBehaviour
 
             SceneManager.LoadScene("Game");
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            QuitGame();
+        }
     }
 
     public void Winner(string playerWinner)
@@ -116,5 +121,13 @@ public class Game : MonoBehaviour
         GameObject.FindGameObjectWithTag("WinnerText").GetComponent<Text>().text = playerWinner + " is the winner";
 
         GameObject.FindGameObjectWithTag("RestartText").GetComponent<Text>().enabled = true;
+    }
+
+    public void QuitGame()
+    {
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+        #endif
+        Application.Quit();
     }
 }

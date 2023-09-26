@@ -9,6 +9,7 @@ TagManager:
   - LoserTextTag
   - RestartText
   - WinnerText
+  - QuitGameTag
   layers:
   - Default
   - TransparentFX
