@@ -25,6 +25,7 @@ To run the chess game, follow these steps:
 
 - Use the mouse to interact with the chessboard.
 - Click on a piece to select it, and click on a valid destination to move the piece.
+- A copy of the finished game can be downloaded from the folder "Finished Game", download the contents of this folder and follow the instructions in the Readme file.
 - Enjoy playing chess!
 
 ## Contributing
