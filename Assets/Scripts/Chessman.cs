@@ -144,11 +144,30 @@ public class Chessman : MonoBehaviour
                 break;
 
             case "black_pawn":
-                PawnMovePlate(xBoard, yBoard - 1);
+                if(yBoard == 6)
+                {
+                    PawnDoubleMovePlate(xBoard, yBoard - 2);
+                    PawnMovePlate(xBoard, yBoard - 1);
+                }
+
+                if (yBoard != 6)
+                {
+                    PawnMovePlate(xBoard, yBoard - 1);
+                }
+                
                 break;
 
             case "white_pawn":
-                PawnMovePlate(xBoard, yBoard + 1);
+                if (yBoard == 1)
+                {
+                    PawnDoubleMovePlate(xBoard, yBoard + 2);
+                    PawnMovePlate(xBoard, yBoard + 1);
+                }
+
+                if (yBoard != 1)
+                {
+                    PawnMovePlate(xBoard, yBoard + 1);
+                }
                 break;
 
         }
@@ -216,6 +235,19 @@ public class Chessman : MonoBehaviour
         }
     }
 
+    public void PawnDoubleMovePlate(int x, int y)
+    {
+        Game sc = controller.GetComponent<Game>();
+        if (sc.PositionOnBoard(x, y))
+        {
+            //spawns in move plate
+            if (sc.GetPosition(x, y) == null)
+            {
+                MovePlateSpawn(x, y);
+            }
+        }
+    }
+
     public void PawnMovePlate(int x, int y)
     {
         Game sc = controller.GetComponent<Game>();
@@ -227,7 +259,8 @@ public class Chessman : MonoBehaviour
                 MovePlateSpawn(x, y);
             }
 
-            //chacks for pieces and spawns in a red move plae if there are pieces
+            //chacks for pieces and spawns in a red move plate if there are pieces
+            
             if(sc.PositionOnBoard(x + 1, y) && sc.GetPosition(x + 1, y) != null 
                 && sc.GetPosition(x + 1,y).GetComponent<Chessman>().player != player)
             {
