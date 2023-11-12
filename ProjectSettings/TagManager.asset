@@ -10,6 +10,9 @@ TagManager:
   - RestartText
   - WinnerText
   - QuitGameTag
+  - white
+  - black
+  - CheckText
   layers:
   - Default
   - TransparentFX

@@ -38,15 +38,24 @@ public class MovePlate : MonoBehaviour
             Destroy(cp);
         }
 
+        controller.GetComponent<Game>().CheckCheck();
 
-        controller.GetComponent<Game>().SetPositionEmpty(reference.GetComponent<Chessman>().GetXBoard(), 
-        reference.GetComponent<Chessman>().GetYBoard());
+
+        controller.GetComponent<Game>().SetPositionEmpty(reference.GetComponent<Chessman>().GetXBoard(),
+            reference.GetComponent<Chessman>().GetYBoard());
 
         reference.GetComponent<Chessman>().SetXBoard(matrixX);
         reference.GetComponent<Chessman>().SetYBoard(matrixY);
         reference.GetComponent<Chessman>().SetCoords();
 
         controller.GetComponent<Game>().SetPosition(reference);
+
+        controller.GetComponent<Game>().CheckCheck();
+
+        //if (attack)
+        //{
+        //    controller.GetComponent<Game>().CheckCheck();
+        //}
 
         controller.GetComponent<Game>().NextTurn();
 
@@ -68,4 +77,5 @@ public class MovePlate : MonoBehaviour
     {
         return reference;
     }
+
 }
