@@ -12,6 +12,13 @@ public class Chessman : MonoBehaviour
     internal float XOffset = -2.45f;
     internal float YOffset = -2.35f;
 
+    //Check
+    //public string Check = "false";
+
+    //public string myTest = "fish";
+
+    //public string fish = "goldfish";
+
     //Positions
     private int xBoard = -1;
     private int yBoard = -1;
@@ -86,16 +93,20 @@ public class Chessman : MonoBehaviour
     {
         if (!controller.GetComponent<Game>().IsGameOver() && controller.GetComponent<Game>().GetCurrentPlayer() == player)
         {
+            //Check = false;
+            controller.GetComponent<Game>().CheckCheck();
+
             DestroyMovePlates();
 
             InitiateMovePlates();
+
         }
     }
 
     public void DestroyMovePlates()
     {
         GameObject[] movePlates = GameObject.FindGameObjectsWithTag("MovePlate");
-        for(int i = 0; i < movePlates.Length; i++)
+        for (int i = 0; i < movePlates.Length; i++)
         {
             Destroy(movePlates[i]);
         }
@@ -144,7 +155,7 @@ public class Chessman : MonoBehaviour
                 break;
 
             case "black_pawn":
-                if(yBoard == 6)
+                if (yBoard == 6)
                 {
                     PawnDoubleMovePlate(xBoard, yBoard - 2);
                     PawnMovePlate(xBoard, yBoard - 1);
@@ -154,7 +165,7 @@ public class Chessman : MonoBehaviour
                 {
                     PawnMovePlate(xBoard, yBoard - 1);
                 }
-                
+
                 break;
 
             case "white_pawn":
@@ -180,16 +191,28 @@ public class Chessman : MonoBehaviour
         int x = xBoard + xIncrement;
         int y = yBoard + yIncrement;
 
-        while(sc.PositionOnBoard(x,y) && sc.GetPosition(x,y) == null)
+        while (sc.PositionOnBoard(x, y) && sc.GetPosition(x, y) == null)
         {
             MovePlateSpawn(x, y);
             x += xIncrement;
             y += yIncrement;
         }
 
-        if(sc.PositionOnBoard(x,y) && sc.GetPosition(x, y).GetComponent<Chessman>().player != player)
+        if (sc.PositionOnBoard(x, y) && sc.GetPosition(x, y).GetComponent<Chessman>().player != player)
         {
-            MovePlateAttackSpawn(x, y);
+            GameObject cp = controller.GetComponent<Game>().GetPosition(x, y);
+
+            //check if it is the king
+            if (cp.name == "white_king" || cp.name == "black_king")
+            {
+                GlobalVariables.InCheck = true;
+                //Debug.Log("Line Move PLate Check");
+            }
+
+            else
+            {
+                MovePlateAttackSpawn(x, y);
+            }
         }
     }
 
@@ -220,17 +243,28 @@ public class Chessman : MonoBehaviour
     public void PointMovePlate(int x, int y)
     {
         Game sc = controller.GetComponent<Game>();
-        if(sc.PositionOnBoard(x, y))
+        if (sc.PositionOnBoard(x, y))
         {
             GameObject cp = sc.GetPosition(x, y);
 
-            if(cp == null)
+            if (cp == null)
             {
                 MovePlateSpawn(x, y);
-            } 
-            else if(cp.GetComponent<Chessman>().player != player)
+            }
+            else if (cp.GetComponent<Chessman>().player != player)
             {
-                MovePlateAttackSpawn(x, y);
+                //GameObject cp = controller.GetComponent<Game>().GetPosition(x, y);
+
+                //check if it is the king
+                if (cp.name == "white_king" || cp.name == "black_king")
+                {
+                    GlobalVariables.InCheck = true;
+                }
+
+                else
+                {
+                    MovePlateAttackSpawn(x, y);
+                }
             }
         }
     }
@@ -254,17 +288,28 @@ public class Chessman : MonoBehaviour
         if (sc.PositionOnBoard(x, y))
         {
             //spawns in move plate
-            if(sc.GetPosition(x, y) == null)
+            if (sc.GetPosition(x, y) == null)
             {
                 MovePlateSpawn(x, y);
             }
 
             //chacks for pieces and spawns in a red move plate if there are pieces
-            
-            if(sc.PositionOnBoard(x + 1, y) && sc.GetPosition(x + 1, y) != null 
-                && sc.GetPosition(x + 1,y).GetComponent<Chessman>().player != player)
+
+            if (sc.PositionOnBoard(x + 1, y) && sc.GetPosition(x + 1, y) != null
+                && sc.GetPosition(x + 1, y).GetComponent<Chessman>().player != player)
             {
-                MovePlateAttackSpawn(x + 1, y);
+                GameObject cp = controller.GetComponent<Game>().GetPosition(x + 1, y);
+
+                //check if it is the king
+                if (cp.name == "white_king" || cp.name == "black_king")
+                {
+                    GlobalVariables.InCheck = true;
+                }
+
+                else
+                {
+                    MovePlateAttackSpawn(x + 1, y);
+                }
             }
 
             //if (sc.GetPosition(x, y) == null)
@@ -274,7 +319,18 @@ public class Chessman : MonoBehaviour
 
             if (sc.PositionOnBoard(x - 1, y) && sc.GetPosition(x - 1, y) != null && sc.GetPosition(x - 1, y).GetComponent<Chessman>().player != player)
             {
-                MovePlateAttackSpawn(x - 1, y);
+                GameObject cp = controller.GetComponent<Game>().GetPosition(x - 1, y);
+
+                //check if it is the king
+                if (cp.name == "white_king" || cp.name == "black_king")
+                {
+                    GlobalVariables.InCheck = true;
+                }
+
+                else
+                {
+                    MovePlateAttackSpawn(x - 1, y);
+                }
             }
         }
     }
@@ -299,6 +355,7 @@ public class Chessman : MonoBehaviour
 
     public void MovePlateAttackSpawn(int matrixX, int matrixY)
     {
+
         float x = matrixX;
         float y = matrixY;
 
