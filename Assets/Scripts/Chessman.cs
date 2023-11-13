@@ -32,11 +32,13 @@ public class Chessman : MonoBehaviour
 
     public void Activate()
     {
+        //creates the controller game object
         controller = GameObject.FindGameObjectWithTag("GameController");
 
         //take te instantiated location and adjust the transform
         SetCoords();
 
+        //puts all of the pieces on the board
         switch (this.name)
         {
             case "black_queen": this.GetComponent<SpriteRenderer>().sprite = black_queen; player = "black"; break;
@@ -105,7 +107,10 @@ public class Chessman : MonoBehaviour
 
     public void DestroyMovePlates()
     {
+        //adds all of the move plates
         GameObject[] movePlates = GameObject.FindGameObjectsWithTag("MovePlate");
+
+        //loops through all of the move plates and destroys them
         for (int i = 0; i < movePlates.Length; i++)
         {
             Destroy(movePlates[i]);
@@ -114,6 +119,7 @@ public class Chessman : MonoBehaviour
 
     public void InitiateMovePlates()
     {
+        //creates different move plate patterns depending on which piece is selected
         switch (this.name)
         {
             case "black_queen":
@@ -155,12 +161,14 @@ public class Chessman : MonoBehaviour
                 break;
 
             case "black_pawn":
+                //if the pawn is in its starting position it spawns 2 move plates
                 if (yBoard == 6)
                 {
                     PawnDoubleMovePlate(xBoard, yBoard - 2);
                     PawnMovePlate(xBoard, yBoard - 1);
                 }
 
+                //if the pawn is not in its starting position it spawns its normal moveplates
                 if (yBoard != 6)
                 {
                     PawnMovePlate(xBoard, yBoard - 1);
@@ -169,12 +177,14 @@ public class Chessman : MonoBehaviour
                 break;
 
             case "white_pawn":
+                //if the pawn is in its starting position it spawns 2 move plates
                 if (yBoard == 1)
                 {
                     PawnDoubleMovePlate(xBoard, yBoard + 2);
                     PawnMovePlate(xBoard, yBoard + 1);
                 }
 
+                //if the pawn is not in its starting position it spawns its normal moveplates
                 if (yBoard != 1)
                 {
                     PawnMovePlate(xBoard, yBoard + 1);
@@ -188,9 +198,11 @@ public class Chessman : MonoBehaviour
     {
         Game sc = controller.GetComponent<Game>();
 
+        //adjusts the coordinates
         int x = xBoard + xIncrement;
         int y = yBoard + yIncrement;
 
+        //if the square is empty a move plate is spawned
         while (sc.PositionOnBoard(x, y) && sc.GetPosition(x, y) == null)
         {
             MovePlateSpawn(x, y);
@@ -198,6 +210,7 @@ public class Chessman : MonoBehaviour
             y += yIncrement;
         }
 
+        //checks if there is an enemy piece on the square
         if (sc.PositionOnBoard(x, y) && sc.GetPosition(x, y).GetComponent<Chessman>().player != player)
         {
             GameObject cp = controller.GetComponent<Game>().GetPosition(x, y);
@@ -205,17 +218,20 @@ public class Chessman : MonoBehaviour
             //check if it is the king
             if (cp.name == "white_king" || cp.name == "black_king")
             {
+                //set InCheck to true if it is the king
                 GlobalVariables.InCheck = true;
                 //Debug.Log("Line Move PLate Check");
             }
 
             else
             {
+                //if it is any other piece an attack move plate is spawned
                 MovePlateAttackSpawn(x, y);
             }
         }
     }
 
+    //defines the knights movement pattern
     public void LMovePlate()
     {
         PointMovePlate(xBoard + 1, yBoard + 2);
@@ -228,6 +244,7 @@ public class Chessman : MonoBehaviour
         PointMovePlate(xBoard - 2, yBoard - 1);
     }
 
+    //defines the kings movement pattern
     public void SurroundMovePlate()
     {
         PointMovePlate(xBoard, yBoard + 1);
@@ -249,6 +266,7 @@ public class Chessman : MonoBehaviour
 
             if (cp == null)
             {
+                //if the square is empty spawn a move plate
                 MovePlateSpawn(x, y);
             }
             else if (cp.GetComponent<Chessman>().player != player)
@@ -258,11 +276,13 @@ public class Chessman : MonoBehaviour
                 //check if it is the king
                 if (cp.name == "white_king" || cp.name == "black_king")
                 {
+                    //set InCheck to true if it is the king
                     GlobalVariables.InCheck = true;
                 }
 
                 else
                 {
+                    //if it is any other piece an attack move plate is spawned
                     MovePlateAttackSpawn(x, y);
                 }
             }
@@ -274,9 +294,9 @@ public class Chessman : MonoBehaviour
         Game sc = controller.GetComponent<Game>();
         if (sc.PositionOnBoard(x, y))
         {
-            //spawns in move plate
             if (sc.GetPosition(x, y) == null)
             {
+                //spawns in move plate if the square is empty
                 MovePlateSpawn(x, y);
             }
         }
@@ -287,14 +307,13 @@ public class Chessman : MonoBehaviour
         Game sc = controller.GetComponent<Game>();
         if (sc.PositionOnBoard(x, y))
         {
-            //spawns in move plate
+            //spawns in move plate if the square is empty
             if (sc.GetPosition(x, y) == null)
             {
                 MovePlateSpawn(x, y);
             }
 
             //chacks for pieces and spawns in a red move plate if there are pieces
-
             if (sc.PositionOnBoard(x + 1, y) && sc.GetPosition(x + 1, y) != null
                 && sc.GetPosition(x + 1, y).GetComponent<Chessman>().player != player)
             {
@@ -303,11 +322,13 @@ public class Chessman : MonoBehaviour
                 //check if it is the king
                 if (cp.name == "white_king" || cp.name == "black_king")
                 {
+                    //set InCheck to true if it is the king
                     GlobalVariables.InCheck = true;
                 }
 
                 else
                 {
+                    //if it is any other piece an attack move plate is spawned
                     MovePlateAttackSpawn(x + 1, y);
                 }
             }
@@ -329,6 +350,7 @@ public class Chessman : MonoBehaviour
 
                 else
                 {
+                    //if it is any other piece an attack move plate is spawned
                     MovePlateAttackSpawn(x - 1, y);
                 }
             }
@@ -346,11 +368,15 @@ public class Chessman : MonoBehaviour
         x += XOffset;
         y += YOffset;
 
+        //if (SelfNotInCheck())
+        //{
+        //creates  the move plate
         GameObject mp = Instantiate(movePlate, new Vector3(x, y, -3.0f), Quaternion.identity);
-
         MovePlate mpScript = mp.GetComponent<MovePlate>();
         mpScript.SetReference(gameObject);
         mpScript.SetCoords(matrixX, matrixY);
+        //}
+
     }
 
     public void MovePlateAttackSpawn(int matrixX, int matrixY)
@@ -365,11 +391,31 @@ public class Chessman : MonoBehaviour
         x += XOffset;
         y += YOffset;
 
+        //if (SelfNotInCheck())
+        //{
+        //creates the attack move plate
         GameObject mp = Instantiate(movePlate, new Vector3(x, y, -3.0f), Quaternion.identity);
-
         MovePlate mpScript = mp.GetComponent<MovePlate>();
         mpScript.attack = true;
         mpScript.SetReference(gameObject);
         mpScript.SetCoords(matrixX, matrixY);
+        //}
     }
+
+    //public bool SelfNotInCheck()
+    //{
+    //    GameObject cp = controller.GetComponent<Game>().GetPosition(xBoard, yBoard);
+    //    //cp.name;
+
+    //    if (GlobalVariables.currentPlayer == "white")
+    //    {
+    //        //Check for check in all the black pieces
+    //    }
+    //    if (GlobalVariables.currentPlayer == "black")
+    //    {
+    //        //Check for check in all the white pieces
+    //    }
+
+    //    return false;
+    //}
 }
