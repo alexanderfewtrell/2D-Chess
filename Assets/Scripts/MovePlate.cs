@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MovePlate : MonoBehaviour
 {
+    //creates the controller game object
     public GameObject controller;
 
     GameObject reference = null;
@@ -17,6 +18,7 @@ public class MovePlate : MonoBehaviour
 
     public void Start()
     {
+        //changes the attack move plate color to red
         if (attack)
         {
             gameObject.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
@@ -27,6 +29,7 @@ public class MovePlate : MonoBehaviour
     {
         controller = GameObject.FindGameObjectWithTag("GameController");
 
+        //checks if the king has been taken
         if (attack)
         {
             GameObject cp = controller.GetComponent<Game>().GetPosition(matrixX, matrixY);
@@ -38,18 +41,22 @@ public class MovePlate : MonoBehaviour
             Destroy(cp);
         }
 
+        //checks if any pieces can take the king
         controller.GetComponent<Game>().CheckCheck();
 
-
+        //gets the coordinates
         controller.GetComponent<Game>().SetPositionEmpty(reference.GetComponent<Chessman>().GetXBoard(),
             reference.GetComponent<Chessman>().GetYBoard());
 
+        //Sets the new coordinates
         reference.GetComponent<Chessman>().SetXBoard(matrixX);
         reference.GetComponent<Chessman>().SetYBoard(matrixY);
         reference.GetComponent<Chessman>().SetCoords();
 
+        //updates the coordinates
         controller.GetComponent<Game>().SetPosition(reference);
 
+        //checks if any pieces can take the king
         controller.GetComponent<Game>().CheckCheck();
 
         //if (attack)
@@ -57,8 +64,10 @@ public class MovePlate : MonoBehaviour
         //    controller.GetComponent<Game>().CheckCheck();
         //}
 
+        //changes the player to the opposite player
         controller.GetComponent<Game>().NextTurn();
 
+        //Destroyes any leftover move plates
         reference.GetComponent<Chessman>().DestroyMovePlates();
     }
 
