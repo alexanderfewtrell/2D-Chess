@@ -8,7 +8,6 @@ public class Game : MonoBehaviour
 {
     // creates the chesspiece game object that will be used for all of the pieces
     public GameObject chesspiece;
-
     private GameObject[,] positions = new GameObject[8, 8];
     private GameObject[] playerBlack = new GameObject[16];
     private GameObject[] playerWhite = new GameObject[16];
@@ -50,6 +49,8 @@ public class Game : MonoBehaviour
             SetPosition(playerBlack[i]);
             SetPosition(playerWhite[i]);
         }
+        DataAccess dataAccess = new DataAccess();
+        string GameName = dataAccess.NewGame();
     }
 
     //creates the objects for all of the pieces
