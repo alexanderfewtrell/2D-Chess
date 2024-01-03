@@ -395,10 +395,15 @@ public class Chessman : MonoBehaviour
             GameObject cp = controller.GetComponent<Game>().GetPosition(x, y);
 
             //check if it is the king
-            if (cp.name == "white_king" || cp.name == "black_king")
+            if (cp.name == "white_king")
             {
                 //set InCheck to true if it is the king
-                GlobalVariables.InCheck = true;
+                GlobalVariables.WhiteInCheck = true;
+            }
+
+            if(cp.name == "black_king")
+            {
+                GlobalVariables.BlackInCheck = true;
             }
         }
     }
@@ -441,10 +446,15 @@ public class Chessman : MonoBehaviour
                 if (cp.GetComponent<Chessman>().player != player)
                 {
                     //check if it is the king
-                    if (cp.name == "white_king" || cp.name == "black_king")
+                    if (cp.name == "white_king")
                     {
                         //set InCheck to true if it is the king
-                        GlobalVariables.InCheck = true;
+                        GlobalVariables.WhiteInCheck = true;
+                    }
+
+                    if (cp.name == "black_king")
+                    {
+                        GlobalVariables.BlackInCheck = true;
                     }
                 }
             }
@@ -463,10 +473,15 @@ public class Chessman : MonoBehaviour
                 GameObject cp = controller.GetComponent<Game>().GetPosition(x + 1, y);
 
                 //check if it is the king
-                if (cp.name == "white_king" || cp.name == "black_king")
+                if (cp.name == "white_king")
                 {
                     //set InCheck to true if it is the king
-                    GlobalVariables.InCheck = true;
+                    GlobalVariables.WhiteInCheck = true;
+                }
+
+                if (cp.name == "black_king")
+                {
+                    GlobalVariables.BlackInCheck = true;
                 }
             }
 
@@ -475,9 +490,15 @@ public class Chessman : MonoBehaviour
                 GameObject cp = controller.GetComponent<Game>().GetPosition(x - 1, y);
 
                 //check if it is the king
-                if (cp.name == "white_king" || cp.name == "black_king")
+                if (cp.name == "white_king")
                 {
-                    GlobalVariables.InCheck = true;
+                    //set InCheck to true if it is the king
+                    GlobalVariables.WhiteInCheck = true;
+                }
+
+                if (cp.name == "black_king")
+                {
+                    GlobalVariables.BlackInCheck = true;
                 }
             }
         }

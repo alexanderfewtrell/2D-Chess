@@ -163,15 +163,21 @@ public class Game : MonoBehaviour
     public void CheckCheck()
     {
         //sets the check variable to false
-        GlobalVariables.InCheck = false;
+        GlobalVariables.WhiteInCheck = false;
+        GlobalVariables.BlackInCheck = false;
 
         //calls the function InCheck function which checks if any pieces on the board can take the king
         InCheck();
 
-        //if the variable InCheck is set to true then the check text is displayed
-        if (GlobalVariables.InCheck)
+        if (GlobalVariables.WhiteInCheck)
         {
             GameObject.FindGameObjectWithTag("CheckText").GetComponent<Text>().enabled = true;
+            GameObject.FindGameObjectWithTag("CheckText").GetComponent<Text>().text = "White is in Check";
+        }
+        else if (GlobalVariables.BlackInCheck)
+        {
+            GameObject.FindGameObjectWithTag("CheckText").GetComponent<Text>().enabled = true;
+            GameObject.FindGameObjectWithTag("CheckText").GetComponent<Text>().text = "Black is in Check";
         }
         else
         {
@@ -226,7 +232,7 @@ public class Game : MonoBehaviour
         //runs the InitiateMovePlates function which will change the Check variable to true if any of the pieces can take the king
         cm.InitiateCheckPlates();
 
-        if (GlobalVariables.InCheck)
+        if (GlobalVariables.WhiteInCheck || GlobalVariables.BlackInCheck)
         {
             //if InCheck is true CanTakeKing returns true
             return true;
