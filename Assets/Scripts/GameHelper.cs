@@ -2,6 +2,7 @@ using System;
 
 public class GameHelper
 {
+    // sets game name to the current date and time
     public string CreateGameName()
     {
         DateTime CurrentTime = DateTime.Now;
@@ -9,6 +10,7 @@ public class GameHelper
         return CurrentTime.ToString();
     }
 
+    // gets the current score for the color from the database and increments the value then updates it and puts it back in the database
     public void UpdateScore(string piece)
     {
         DataAccess dataAccess = new DataAccess();
@@ -29,6 +31,7 @@ public class GameHelper
         }
     }
 
+    //gives each pieces numerical values for how many points they are worth
     public int GetAdditionalScore(string piece)
     {
         switch (piece)

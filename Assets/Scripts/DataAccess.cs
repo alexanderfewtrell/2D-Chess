@@ -1,13 +1,12 @@
 using UnityEngine;
 using System.Data;
 using Mono.Data.Sqlite;
-using System.IO;
-using System;
 
 public class DataAccess
 {
     string connection = "URI=file:" + Application.persistentDataPath + "/" + "ChessDatabase";
 
+    // creates the new database and adds columns
     public void NewDataBase()
     {
         // Open connection
@@ -26,6 +25,7 @@ public class DataAccess
         dbcon.Close();
     }
 
+    //puts the game name in the database and sets initial scores to 0
     public long AddGameName(string GameName)
     {
         // Open connection
@@ -45,6 +45,7 @@ public class DataAccess
         return Id;
     }
 
+    //gets the score from the database depending on which color is playing
     public int GetScore(string color)
     {
         // Open connection
@@ -74,6 +75,7 @@ public class DataAccess
         return Score;
     }
 
+    //updates the database with the new score for the appropriate color
     public void UpdateScore(int newScore, string color)
     {
         string CommandText = "";

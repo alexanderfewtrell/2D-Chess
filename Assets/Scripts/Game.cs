@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -54,7 +52,6 @@ public class Game : MonoBehaviour
         DataAccess dataAccess = new DataAccess();
         dataAccess.NewDataBase();
         GlobalVariables.GameId = dataAccess.AddGameName(gameName);
-        Debug.Log(GlobalVariables.GameId);
     }
 
     //creates the objects for all of the pieces
@@ -174,12 +171,10 @@ public class Game : MonoBehaviour
         //if the variable InCheck is set to true then the check text is displayed
         if (GlobalVariables.InCheck)
         {
-            Debug.Log("Turn Check text on");
             GameObject.FindGameObjectWithTag("CheckText").GetComponent<Text>().enabled = true;
         }
         else
         {
-            Debug.Log("didnt turn check on");
             GameObject.FindGameObjectWithTag("CheckText").GetComponent<Text>().enabled = false;
         }
     }
@@ -207,29 +202,6 @@ public class Game : MonoBehaviour
         blackPieces.CopyTo(AllPieces, whitePieces.Length);
         return AllPieces;
     }
-
-    //private object[] GetPiecesByColor(string color)
-    //{
-    //    if (color == "white")
-    //    {
-    //        return GameObject.FindGameObjectsWithTag("white");
-
-    //    }
-
-    //    if (color == "black")
-    //    {
-    //        return GameObject.FindGameObjectsWithTag("black");
-    //    }
-
-    //    throw new System.ArgumentException("Invalid Color");
-    //}
-
-    //public void MovePlateCheck()
-    //{
-    //    object[] AllMovePlates = GameObject.FindGameObjectsWithTag("MovePlate");
-
-    //    //LoopPieces(AllMovePlates);
-    //}
 
     public void LoopPieces(object[] obj)
     {

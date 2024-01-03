@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MovePlate : MonoBehaviour
@@ -41,9 +39,6 @@ public class MovePlate : MonoBehaviour
             GameHelper gameHelper = new GameHelper();
             gameHelper.UpdateScore(cp.name);
 
-            Debug.Log(GlobalVariables.WhiteScore);
-            Debug.Log(GlobalVariables.BlackScore);
-
             //destroys pieces when taken
             Destroy(cp);
         }
@@ -65,11 +60,6 @@ public class MovePlate : MonoBehaviour
 
         //checks if any pieces can take the king
         controller.GetComponent<Game>().CheckCheck();
-
-        //if (attack)
-        //{
-        //    controller.GetComponent<Game>().CheckCheck();
-        //}
 
         //changes the player to the opposite player
         controller.GetComponent<Game>().NextTurn();
