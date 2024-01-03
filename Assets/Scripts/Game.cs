@@ -49,8 +49,11 @@ public class Game : MonoBehaviour
             SetPosition(playerBlack[i]);
             SetPosition(playerWhite[i]);
         }
+        GameHelper gameHelper = new GameHelper();
+        string gameName = gameHelper.CreateGameName();
         DataAccess dataAccess = new DataAccess();
-        string GameName = dataAccess.NewGame();
+        dataAccess.NewDataBase();
+        dataAccess.AddGameName(gameName);
     }
 
     //creates the objects for all of the pieces

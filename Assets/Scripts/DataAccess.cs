@@ -6,13 +6,11 @@ using System;
 
 public class DataAccess
 {
-	public string NewGame()
-    {
-		DateTime CurrentTime = DateTime.Now;
-		string GameName = CurrentTime.ToString();
+    string connection = "URI=file:" + Application.persistentDataPath + "/" + "ChessDatabase";
 
+    public void NewDataBase()
+    {
         // Open connection
-        string connection = "URI=file:" + Application.persistentDataPath + "/" + "ChessDatabase";
         IDbConnection dbcon = new SqliteConnection(connection);
         dbcon.Open();
 
@@ -24,12 +22,21 @@ public class DataAccess
         dbcmd.CommandText = q_createTable;
         dbcmd.ExecuteReader();
 
+        // Close connection
+        dbcon.Close();
+    }
+
+    public void AddGameName(string GameName)
+    {
+        // Open connection
+        IDbConnection dbcon = new SqliteConnection(connection);
+        dbcon.Open();
+
         IDbCommand cmnd = dbcon.CreateCommand();
         cmnd.CommandText = ($"INSERT INTO Games (GameName) VALUES ('{GameName}')");
         cmnd.ExecuteNonQuery();
 
         // Close connection
         dbcon.Close();
-        return GameName;
     }
 }
