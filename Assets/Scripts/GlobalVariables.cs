@@ -14,5 +14,9 @@ public class GlobalVariables : MonoBehaviour
     //public static bool WhiteInCheck = false;
     //public static bool BlackInCheck = false;
 
+    public static long GameId = 0;
+    public static int WhiteScore = 0;
+    public static int BlackScore = 0;
+
     public static string currentPlayer = "white";
 }

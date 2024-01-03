@@ -53,7 +53,8 @@ public class Game : MonoBehaviour
         string gameName = gameHelper.CreateGameName();
         DataAccess dataAccess = new DataAccess();
         dataAccess.NewDataBase();
-        dataAccess.AddGameName(gameName);
+        GlobalVariables.GameId = dataAccess.AddGameName(gameName);
+        Debug.Log(GlobalVariables.GameId);
     }
 
     //creates the objects for all of the pieces
@@ -131,6 +132,9 @@ public class Game : MonoBehaviour
 
             SceneManager.LoadScene("Game");
         }
+
+        GameObject.FindGameObjectWithTag("WhiteScoreTag").GetComponent<Text>().text = GlobalVariables.WhiteScore.ToString();
+        GameObject.FindGameObjectWithTag("BlackScoreTag").GetComponent<Text>().text = GlobalVariables.BlackScore.ToString();
 
         //ends the game if the escape key is pressed
         if (Input.GetKeyDown(KeyCode.Escape))

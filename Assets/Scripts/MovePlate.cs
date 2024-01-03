@@ -38,6 +38,13 @@ public class MovePlate : MonoBehaviour
 
             if (cp.name == "black_king") controller.GetComponent<Game>().Winner("white");
 
+            GameHelper gameHelper = new GameHelper();
+            gameHelper.UpdateScore(cp.name);
+
+            Debug.Log(GlobalVariables.WhiteScore);
+            Debug.Log(GlobalVariables.BlackScore);
+
+            //destroys pieces when taken
             Destroy(cp);
         }
 
