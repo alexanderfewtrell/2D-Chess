@@ -13,6 +13,9 @@ TagManager:
   - white
   - black
   - CheckText
+  - DataBaseTag
+  - WhiteScoreTag
+  - BlackScoreTag
   layers:
   - Default
   - TransparentFX

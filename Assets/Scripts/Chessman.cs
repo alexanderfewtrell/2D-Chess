@@ -12,13 +12,6 @@ public class Chessman : MonoBehaviour
     internal float XOffset = -2.45f;
     internal float YOffset = -2.35f;
 
-    //Check
-    //public string Check = "false";
-
-    //public string myTest = "fish";
-
-    //public string fish = "goldfish";
-
     //Positions
     private int xBoard = -1;
     private int yBoard = -1;
@@ -333,11 +326,6 @@ public class Chessman : MonoBehaviour
                 }
             }
 
-            //if (sc.GetPosition(x, y) == null)
-            //{
-            //    MovePlateSpawn(x, y);
-            //}
-
             if (sc.PositionOnBoard(x - 1, y) && sc.GetPosition(x - 1, y) != null && sc.GetPosition(x - 1, y).GetComponent<Chessman>().player != player)
             {
                 GameObject cp = controller.GetComponent<Game>().GetPosition(x - 1, y);
@@ -368,15 +356,10 @@ public class Chessman : MonoBehaviour
         x += XOffset;
         y += YOffset;
 
-        //if (SelfNotInCheck())
-        //{
-        //creates  the move plate
         GameObject mp = Instantiate(movePlate, new Vector3(x, y, -3.0f), Quaternion.identity);
         MovePlate mpScript = mp.GetComponent<MovePlate>();
         mpScript.SetReference(gameObject);
         mpScript.SetCoords(matrixX, matrixY);
-        //}
-
     }
 
     public void MovePlateAttackSpawn(int matrixX, int matrixY)
@@ -391,31 +374,10 @@ public class Chessman : MonoBehaviour
         x += XOffset;
         y += YOffset;
 
-        //if (SelfNotInCheck())
-        //{
-        //creates the attack move plate
         GameObject mp = Instantiate(movePlate, new Vector3(x, y, -3.0f), Quaternion.identity);
         MovePlate mpScript = mp.GetComponent<MovePlate>();
         mpScript.attack = true;
         mpScript.SetReference(gameObject);
         mpScript.SetCoords(matrixX, matrixY);
-        //}
     }
-
-    //public bool SelfNotInCheck()
-    //{
-    //    GameObject cp = controller.GetComponent<Game>().GetPosition(xBoard, yBoard);
-    //    //cp.name;
-
-    //    if (GlobalVariables.currentPlayer == "white")
-    //    {
-    //        //Check for check in all the black pieces
-    //    }
-    //    if (GlobalVariables.currentPlayer == "black")
-    //    {
-    //        //Check for check in all the white pieces
-    //    }
-
-    //    return false;
-    //}
 }

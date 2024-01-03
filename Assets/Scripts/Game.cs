@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,7 +6,6 @@ public class Game : MonoBehaviour
 {
     // creates the chesspiece game object that will be used for all of the pieces
     public GameObject chesspiece;
-
     private GameObject[,] positions = new GameObject[8, 8];
     private GameObject[] playerBlack = new GameObject[16];
     private GameObject[] playerWhite = new GameObject[16];
@@ -50,6 +47,11 @@ public class Game : MonoBehaviour
             SetPosition(playerBlack[i]);
             SetPosition(playerWhite[i]);
         }
+        GameHelper gameHelper = new GameHelper();
+        string gameName = gameHelper.CreateGameName();
+        DataAccess dataAccess = new DataAccess();
+        dataAccess.NewDataBase();
+        GlobalVariables.GameId = dataAccess.AddGameName(gameName);
     }
 
     //creates the objects for all of the pieces
@@ -128,6 +130,9 @@ public class Game : MonoBehaviour
             SceneManager.LoadScene("Game");
         }
 
+        GameObject.FindGameObjectWithTag("WhiteScoreTag").GetComponent<Text>().text = GlobalVariables.WhiteScore.ToString();
+        GameObject.FindGameObjectWithTag("BlackScoreTag").GetComponent<Text>().text = GlobalVariables.BlackScore.ToString();
+
         //ends the game if the escape key is pressed
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -166,12 +171,10 @@ public class Game : MonoBehaviour
         //if the variable InCheck is set to true then the check text is displayed
         if (GlobalVariables.InCheck)
         {
-            Debug.Log("Turn Check text on");
             GameObject.FindGameObjectWithTag("CheckText").GetComponent<Text>().enabled = true;
         }
         else
         {
-            Debug.Log("didnt turn check on");
             GameObject.FindGameObjectWithTag("CheckText").GetComponent<Text>().enabled = false;
         }
     }
@@ -199,29 +202,6 @@ public class Game : MonoBehaviour
         blackPieces.CopyTo(AllPieces, whitePieces.Length);
         return AllPieces;
     }
-
-    //private object[] GetPiecesByColor(string color)
-    //{
-    //    if (color == "white")
-    //    {
-    //        return GameObject.FindGameObjectsWithTag("white");
-
-    //    }
-
-    //    if (color == "black")
-    //    {
-    //        return GameObject.FindGameObjectsWithTag("black");
-    //    }
-
-    //    throw new System.ArgumentException("Invalid Color");
-    //}
-
-    //public void MovePlateCheck()
-    //{
-    //    object[] AllMovePlates = GameObject.FindGameObjectsWithTag("MovePlate");
-
-    //    //LoopPieces(AllMovePlates);
-    //}
 
     public void LoopPieces(object[] obj)
     {
