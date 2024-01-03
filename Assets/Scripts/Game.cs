@@ -224,7 +224,7 @@ public class Game : MonoBehaviour
         Chessman cm = piece.GetComponent<Chessman>();
         
         //runs the InitiateMovePlates function which will change the Check variable to true if any of the pieces can take the king
-        cm.InitiateMovePlates();
+        cm.InitiateCheckPlates();
 
         if (GlobalVariables.InCheck)
         {

@@ -110,6 +110,8 @@ public class Chessman : MonoBehaviour
         }
     }
 
+
+    #region MovePlates
     public void InitiateMovePlates()
     {
         //creates different move plate patterns depending on which piece is selected
@@ -208,17 +210,8 @@ public class Chessman : MonoBehaviour
         {
             GameObject cp = controller.GetComponent<Game>().GetPosition(x, y);
 
-            //check if it is the king
-            if (cp.name == "white_king" || cp.name == "black_king")
+            if (cp.name != "white_king" && cp.name != "black_king")
             {
-                //set InCheck to true if it is the king
-                GlobalVariables.InCheck = true;
-                //Debug.Log("Line Move PLate Check");
-            }
-
-            else
-            {
-                //if it is any other piece an attack move plate is spawned
                 MovePlateAttackSpawn(x, y);
             }
         }
@@ -264,18 +257,8 @@ public class Chessman : MonoBehaviour
             }
             else if (cp.GetComponent<Chessman>().player != player)
             {
-                //GameObject cp = controller.GetComponent<Game>().GetPosition(x, y);
-
-                //check if it is the king
-                if (cp.name == "white_king" || cp.name == "black_king")
+                if (cp.name != "white_king" && cp.name != "black_king")
                 {
-                    //set InCheck to true if it is the king
-                    GlobalVariables.InCheck = true;
-                }
-
-                else
-                {
-                    //if it is any other piece an attack move plate is spawned
                     MovePlateAttackSpawn(x, y);
                 }
             }
@@ -312,17 +295,178 @@ public class Chessman : MonoBehaviour
             {
                 GameObject cp = controller.GetComponent<Game>().GetPosition(x + 1, y);
 
+                if (cp.name != "white_king" && cp.name != "black_king")
+                {
+                    MovePlateAttackSpawn(x + 1, y);
+                }
+            }
+
+            if (sc.PositionOnBoard(x - 1, y) && sc.GetPosition(x - 1, y) != null && sc.GetPosition(x - 1, y).GetComponent<Chessman>().player != player)
+            {
+                GameObject cp = controller.GetComponent<Game>().GetPosition(x - 1, y);
+
+                if (cp.name != "white_king" && cp.name != "black_king")
+                {
+                    MovePlateAttackSpawn(x - 1, y);
+                }
+            }
+        }
+    }
+    #endregion
+
+    #region CheckPlates
+    public void InitiateCheckPlates()
+    {
+        //creates different Check plate patterns depending on which piece is selected
+        switch (this.name)
+        {
+            case "black_queen":
+            case "white_queen":
+                LineCheckPlate(1, 1);
+                LineCheckPlate(1, -1);
+                LineCheckPlate(-1, 1);
+                LineCheckPlate(-1, -1);
+                LineCheckPlate(1, 0);
+                LineCheckPlate(-1, 0);
+                LineCheckPlate(0, 1);
+                LineCheckPlate(0, -1);
+                break;
+
+            case "black_knight":
+            case "white_knight":
+                LCheckPlate();
+                break;
+
+            case "black_bishop":
+            case "white_bishop":
+                LineCheckPlate(1, 1);
+                LineCheckPlate(1, -1);
+                LineCheckPlate(-1, 1);
+                LineCheckPlate(-1, -1);
+                break;
+
+            case "black_king":
+            case "white_king":
+                SurroundCheckPlate();
+                break;
+
+            case "black_rook":
+            case "white_rook":
+                LineCheckPlate(1, 0);
+                LineCheckPlate(-1, 0);
+                LineCheckPlate(0, 1);
+                LineCheckPlate(0, -1);
+                break;
+
+            case "black_pawn":
+                //if the pawn is not in its starting position it spawns its normal Checkplates                
+                PawnCheckPlate(xBoard, yBoard - 1);
+
+                break;
+
+            case "white_pawn":
+                //if the pawn is not in its starting position it spawns its normal Checkplates
+                PawnCheckPlate(xBoard, yBoard + 1);
+
+                break;
+
+        }
+    }
+
+    public void LineCheckPlate(int xIncrement, int yIncrement)
+    {
+        Game sc = controller.GetComponent<Game>();
+
+        //adjusts the coordinates
+        int x = xBoard + xIncrement;
+        int y = yBoard + yIncrement;
+
+        //if the square is empty a Check plate is spawned
+        while (sc.PositionOnBoard(x, y) && sc.GetPosition(x, y) == null)
+        {
+            //CheckPlateSpawn(x, y);
+            x += xIncrement;
+            y += yIncrement;
+        }
+
+        //checks if there is an enemy piece on the square
+        if (sc.PositionOnBoard(x, y) && sc.GetPosition(x, y).GetComponent<Chessman>().player != player)
+        {
+            GameObject cp = controller.GetComponent<Game>().GetPosition(x, y);
+
+            //check if it is the king
+            if (cp.name == "white_king" || cp.name == "black_king")
+            {
+                //set InCheck to true if it is the king
+                GlobalVariables.InCheck = true;
+            }
+        }
+    }
+
+    //defines the knights Checkment pattern
+    public void LCheckPlate()
+    {
+        PointCheckPlate(xBoard + 1, yBoard + 2);
+        PointCheckPlate(xBoard - 1, yBoard + 2);
+        PointCheckPlate(xBoard + 2, yBoard + 1);
+        PointCheckPlate(xBoard + 2, yBoard - 1);
+        PointCheckPlate(xBoard + 1, yBoard - 2);
+        PointCheckPlate(xBoard - 1, yBoard - 2);
+        PointCheckPlate(xBoard - 2, yBoard + 1);
+        PointCheckPlate(xBoard - 2, yBoard - 1);
+    }
+
+    //defines the kings Checkment pattern
+    public void SurroundCheckPlate()
+    {
+        PointCheckPlate(xBoard, yBoard + 1);
+        PointCheckPlate(xBoard, yBoard - 1);
+        PointCheckPlate(xBoard - 1, yBoard - 1);
+        PointCheckPlate(xBoard - 1, yBoard);
+        PointCheckPlate(xBoard - 1, yBoard + 1);
+        PointCheckPlate(xBoard + 1, yBoard - 1);
+        PointCheckPlate(xBoard + 1, yBoard);
+        PointCheckPlate(xBoard + 1, yBoard + 1);
+    }
+
+    public void PointCheckPlate(int x, int y)
+    {
+        Game sc = controller.GetComponent<Game>();
+        if (sc.PositionOnBoard(x, y))
+        {
+            GameObject cp = sc.GetPosition(x, y);
+
+            if (cp != null)
+            {
+                if (cp.GetComponent<Chessman>().player != player)
+                {
+                    //check if it is the king
+                    if (cp.name == "white_king" || cp.name == "black_king")
+                    {
+                        //set InCheck to true if it is the king
+                        GlobalVariables.InCheck = true;
+                    }
+                }
+            }
+        }
+    }
+
+    public void PawnCheckPlate(int x, int y)
+    {
+        Game sc = controller.GetComponent<Game>();
+        if (sc.PositionOnBoard(x, y))
+        {
+            //chacks for pieces and spawns in a red Check plate if there are pieces
+            if (sc.PositionOnBoard(x + 1, y) && sc.GetPosition(x + 1, y) != null
+                && sc.GetPosition(x + 1, y).GetComponent<Chessman>().player != player)
+            {
+                GameObject cp = controller.GetComponent<Game>().GetPosition(x + 1, y);
+
                 //check if it is the king
                 if (cp.name == "white_king" || cp.name == "black_king")
                 {
                     //set InCheck to true if it is the king
                     GlobalVariables.InCheck = true;
-                }
-
-                else
-                {
-                    //if it is any other piece an attack move plate is spawned
-                    MovePlateAttackSpawn(x + 1, y);
                 }
             }
 
@@ -335,15 +479,10 @@ public class Chessman : MonoBehaviour
                 {
                     GlobalVariables.InCheck = true;
                 }
-
-                else
-                {
-                    //if it is any other piece an attack move plate is spawned
-                    MovePlateAttackSpawn(x - 1, y);
-                }
             }
         }
     }
+    #endregion
 
     public void MovePlateSpawn(int matrixX, int matrixY)
     {
