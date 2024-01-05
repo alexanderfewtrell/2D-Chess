@@ -93,6 +93,8 @@ public class Chessman : MonoBehaviour
 
             DestroyMovePlates();
 
+            SetStartCoords(xBoard, yBoard);
+
             InitiateMovePlates();
 
         }
@@ -110,11 +112,18 @@ public class Chessman : MonoBehaviour
         }
     }
 
+    public void SetStartCoords(int x, int y)
+    {
+        GlobalVariables.XStartCoord = x;
+        GlobalVariables.YStartCoord = y;
+    }
+
 
     #region MovePlates
     public void InitiateMovePlates()
     {
         //creates different move plate patterns depending on which piece is selected
+        GlobalVariables.CurrentPiece = this.name;
         switch (this.name)
         {
             case "black_queen":

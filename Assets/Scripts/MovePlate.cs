@@ -26,6 +26,7 @@ public class MovePlate : MonoBehaviour
     public void OnMouseUp()
     {
         controller = GameObject.FindGameObjectWithTag("GameController");
+        GameHelper gameHelper = new GameHelper();
 
         //checks if the king has been taken
         if (attack)
@@ -36,18 +37,18 @@ public class MovePlate : MonoBehaviour
 
             if (cp.name == "black_king") controller.GetComponent<Game>().Winner("white");
 
-            GameHelper gameHelper = new GameHelper();
             gameHelper.UpdateScore(cp.name);
 
             //destroys pieces when taken
             Destroy(cp);
+            GlobalVariables.CurrentPieceTaken = cp.ToString();
         }
 
         //checks if any pieces can take the king
         controller.GetComponent<Game>().CheckCheck();
 
         //gets the coordinates
-        controller.GetComponent<Game>().SetPositionEmpty(reference.GetComponent<Chessman>().GetXBoard(),
+        controller.GetComponent<Game>().SetPositionEmpty(reference.GetComponent<Chessman>().GetXBoard(), 
             reference.GetComponent<Chessman>().GetYBoard());
 
         //Sets the new coordinates
@@ -66,6 +67,14 @@ public class MovePlate : MonoBehaviour
 
         //Destroyes any leftover move plates
         reference.GetComponent<Chessman>().DestroyMovePlates();
+
+        //Updates the Database
+        DataAccess dataAccess = new DataAccess();
+        dataAccess.InsertMove(GlobalVariables.CurrentPiece, gameHelper.CompleteCoordinates(GlobalVariables.XStartCoord.ToString(), GlobalVariables.YStartCoord.ToString()), 
+            gameHelper.CompleteCoordinates(matrixX.ToString(), matrixY.ToString()), GlobalVariables.GameId, GlobalVariables.CurrentPieceTaken);
+
+        //resets the values of the variables
+        GlobalVariables.CurrentPieceTaken = "none";
     }
 
     public void SetCoords(int x, int y)

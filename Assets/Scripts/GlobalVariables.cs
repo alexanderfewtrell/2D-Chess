@@ -8,6 +8,11 @@ public class GlobalVariables : MonoBehaviour
     public static bool WhiteInCheck = false;
     public static bool BlackInCheck = false;
 
+    public static int XStartCoord = 0;
+    public static int YStartCoord = 0;
+    public static string CurrentPiece = "";
+    public static string CurrentPieceTaken = "none";
+
     public static long GameId = 0;
     public static int WhiteScore = 0;
     public static int BlackScore = 0;
