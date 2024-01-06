@@ -132,12 +132,6 @@ public class Game : MonoBehaviour
 
         GameObject.FindGameObjectWithTag("WhiteScoreTag").GetComponent<Text>().text = GlobalVariables.WhiteScore.ToString();
         GameObject.FindGameObjectWithTag("BlackScoreTag").GetComponent<Text>().text = GlobalVariables.BlackScore.ToString();
-
-        //ends the game if the escape key is pressed
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            QuitGame();
-        }
     }
 
     //if the king is taken it declares a winner and makes the text appear saying who the winner is
@@ -242,5 +236,16 @@ public class Game : MonoBehaviour
             //if InCheck is true CanTakeKing returns false
             return false;
         }
+    }
+
+    public void UndoButtonClick()
+    {
+        Debug.Log("Button Clicked!");
+        // Add your custom logic here
+    }
+
+    public void QuitButtonClick()
+    {
+        QuitGame();
     }
 }
