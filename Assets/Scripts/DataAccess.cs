@@ -9,6 +9,12 @@ public class DataAccess
     // creates the new database and adds columns
     public void NewDataBase()
     {
+        CreateGamesTable();
+        CreateMovesTable();
+    }
+
+    public void CreateGamesTable()
+    {
         // Open connection
         IDbConnection dbcon = new SqliteConnection(connection);
         dbcon.Open();
@@ -16,10 +22,42 @@ public class DataAccess
         // Create table
         IDbCommand dbcmd;
         dbcmd = dbcon.CreateCommand();
-        string q_createTable = "CREATE TABLE IF NOT EXISTS Games (Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, GameName TEXT, WhiteScore INT, BlackScore INT)";
+        string q_createTable = "CREATE TABLE IF NOT EXISTS Games (GameNameId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, GameName TEXT, WhiteScore INT, BlackScore INT)";
 
         dbcmd.CommandText = q_createTable;
         dbcmd.ExecuteReader();
+
+        // Close connection
+        dbcon.Close();
+    }
+
+    public void CreateMovesTable()
+    {
+        // Open connection
+        IDbConnection dbcon = new SqliteConnection(connection);
+        dbcon.Open();
+
+        // Create table
+        IDbCommand dbcmd;
+        dbcmd = dbcon.CreateCommand();
+        string q_createTable = "CREATE TABLE IF NOT EXISTS Moves (MoveId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Piece TEXT NOT NULL, StartCoords TEXT NOT NULL, EndCoords TEXT NOT NULL, PieceTaken TEXT, GameNameId INT, FOREIGN KEY(GameNameId) REFERENCES GAMES(GameNameId))";
+
+        dbcmd.CommandText = q_createTable;
+        dbcmd.ExecuteReader();
+
+        // Close connection
+        dbcon.Close();
+    }
+
+    public void InsertMove(string piece, string startCoords, string endCoords, long gameNameId, string pieceTaken)
+    {
+        // Open connection
+        IDbConnection dbcon = new SqliteConnection(connection);
+        dbcon.Open();
+
+        IDbCommand cmnd = dbcon.CreateCommand();
+        cmnd.CommandText = ($"INSERT INTO Moves (Piece, StartCoords, EndCoords, PieceTaken, GameNameId) VALUES ('{piece}', '{startCoords}', '{endCoords}', '{pieceTaken}', {gameNameId})");
+        cmnd.ExecuteNonQuery();
 
         // Close connection
         dbcon.Close();
@@ -58,11 +96,11 @@ public class DataAccess
         switch (color)
         {
             case "white":
-                CommandText = ($"SELECT WhiteScore FROM Games WHERE Id = {GlobalVariables.GameId}");
+                CommandText = ($"SELECT WhiteScore FROM Games WHERE GameNameId = {GlobalVariables.GameId}");
                 break;
 
             case "black":
-                CommandText = ($"SELECT BlackScore FROM Games WHERE Id = {GlobalVariables.GameId}");
+                CommandText = ($"SELECT BlackScore FROM Games WHERE GameNameId = {GlobalVariables.GameId}");
                 break;
         }
 
@@ -82,11 +120,11 @@ public class DataAccess
         switch (color)
         {
             case "white":
-                CommandText = ($"UPDATE Games SET WhiteScore = {newScore} WHERE Id = {GlobalVariables.GameId}");
+                CommandText = ($"UPDATE Games SET WhiteScore = {newScore} WHERE GameNameId = {GlobalVariables.GameId}");
                 break;
 
             case "black":
-                CommandText = ($"UPDATE Games SET BlackScore = {newScore} WHERE Id = {GlobalVariables.GameId}");
+                CommandText = ($"UPDATE Games SET BlackScore = {newScore} WHERE GameNameId = {GlobalVariables.GameId}");
                 break;
         }
         IDbConnection dbcon = new SqliteConnection(connection);
