@@ -238,12 +238,14 @@ public class Game : MonoBehaviour
         }
     }
 
+    //is called when the undo button is clicked
     public void UndoButtonClick()
     {
-        Debug.Log("Button Clicked!");
-        // Add your custom logic here
+        UndoMove undoMove = new UndoMove();
+        undoMove.GoBackMove();
     }
 
+    //is called when the quit button is clicked
     public void QuitButtonClick()
     {
         QuitGame();

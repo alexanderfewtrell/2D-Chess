@@ -137,4 +137,46 @@ public class DataAccess
         // Close connection
         dbcon.Close();
     }
+
+    public Move GetLastRowData(long gameNameId)
+    {
+        IDbConnection dbcon = new SqliteConnection(connection);
+        dbcon.Open();
+
+        string CommandText = $"SELECT * FROM Moves WHERE GameNameId = {gameNameId} ORDER BY MoveId DESC LIMIT 1";
+
+        IDbCommand cmnd = dbcon.CreateCommand();
+        cmnd.CommandText = CommandText;
+
+        SqliteDataReader Moves = (SqliteDataReader)cmnd.ExecuteReader();
+
+        Move move = new Move();
+        while (Moves.Read())
+        {
+            move.MoveId = (long)Moves["MoveId"];
+            move.StartCoords = (string)Moves["StartCoords"];
+            move.EndCoords = (string)Moves["EndCoords"];
+            move.Piece = (string)Moves["Piece"];
+            move.PieceTaken = (string)Moves["PieceTaken"];
+        }
+
+        dbcon.Close();
+
+        return move;
+    }
+
+    public void DeleteLastRow(long moveId)
+    {
+        IDbConnection dbcon = new SqliteConnection(connection);
+        dbcon.Open();
+
+        IDbCommand cmnd = dbcon.CreateCommand();
+
+        string CommandText = $"DELETE FROM Moves WHERE MoveId = {moveId}";
+
+        cmnd.CommandText = CommandText;
+        cmnd.ExecuteNonQuery();
+
+        dbcon.Close();
+    }
 }
