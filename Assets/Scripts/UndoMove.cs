@@ -27,8 +27,11 @@ public class UndoMove
         int EndYCoord = int.Parse(GetYCoords(move.EndCoords));
 
         controller = GameObject.FindGameObjectWithTag("GameController");
-
         GameObject cp = controller.GetComponent<Game>().GetPosition(EndXCoord, EndYCoord);
+        MovePlate movePlate = cp.GetComponent<MovePlate>();
+        //movePlate.MakeMove(EndXCoord, EndYCoord, cp);
+
+        //GameObject cp = controller.GetComponent<Game>().GetPosition(EndXCoord, EndYCoord);
 
         cp.GetComponent<Chessman>().SetXBoard(StartXCoord);
         cp.GetComponent<Chessman>().SetYBoard(StartYCoord);
@@ -50,6 +53,8 @@ public class UndoMove
 
         //undos the turn and sets it back to the original player
         controller.GetComponent<Game>().NextTurn();
+
+        cp.GetComponent<Chessman>().DestroyMovePlates();
 
         //delete the last row of the data base to finish the undo move
         dataAccess.DeleteLastRow(move.MoveId);
