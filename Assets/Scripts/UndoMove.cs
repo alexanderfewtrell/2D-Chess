@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class UndoMove
 {
     public GameObject controller;
+    public GameObject movePlate;
+    public Sprite black_queen, black_knight, black_bishop, black_king, black_rook, black_pawn;
+    public Sprite white_queen, white_knight, white_bishop, white_king, white_rook, white_pawn;
     //public GameObject chesspiece;
     //private GameObject[,] positions = new GameObject[8, 8];
     //private GameObject[] playerBlack = new GameObject[16];
@@ -28,33 +31,17 @@ public class UndoMove
 
         controller = GameObject.FindGameObjectWithTag("GameController");
         GameObject cp = controller.GetComponent<Game>().GetPosition(EndXCoord, EndYCoord);
-        MovePlate movePlate = cp.GetComponent<MovePlate>();
-        //movePlate.MakeMove(EndXCoord, EndYCoord, cp);
 
-        //GameObject cp = controller.GetComponent<Game>().GetPosition(EndXCoord, EndYCoord);
+        Debug.Log(StartXCoord);
+        Debug.Log(StartYCoord);
+        Debug.Log(cp);
 
-        cp.GetComponent<Chessman>().SetXBoard(StartXCoord);
-        cp.GetComponent<Chessman>().SetYBoard(StartYCoord);
-        cp.GetComponent<Chessman>().SetCoords();
+        Chessman chessman = cp.GetComponent<Chessman>();  
+        chessman.MovePlateSpawn(StartXCoord, StartYCoord);
 
-        //updates the coordinates
-        controller.GetComponent<Game>().SetPosition(cp);
-
-        //undos the turn and sets it back to the original player
-        //controller.GetComponent<Game>().NextTurn();
-
-        //recreates the piece that was taken
-        //if(move.PieceTaken != "none")
-        //{
-        //    this.GetComponent<SpriteRenderer>().sprite = move.PieceTaken; player = GlobalVariables.currentPlayer;
-        //    Game game = new Game();
-        //    game.Create(move.PieceTaken, EndXCoord, EndXCoord, GlobalVariables.currentPlayer);
-        //}
-
-        //undos the turn and sets it back to the original player
-        controller.GetComponent<Game>().NextTurn();
-
-        cp.GetComponent<Chessman>().DestroyMovePlates();
+        MovePlate movePlateScript = new MovePlate();
+        //MovePlate movePlateScript = movePlate.GetComponent<MovePlate>();
+        movePlateScript.MakeMove(StartXCoord, StartYCoord, cp);
 
         //delete the last row of the data base to finish the undo move
         dataAccess.DeleteLastRow(move.MoveId);
@@ -81,4 +68,51 @@ public class UndoMove
 
         return RealYCoord;
     }
+
+    //public void ReCreatePiece(int x, int y)
+    //{
+    //    DataAccess dataAccess = new DataAccess();
+    //    Move move = dataAccess.GetLastRowData(GlobalVariables.GameId);
+    //    Chessman chessman = new Chessman();
+    //    Game game = new Game();
+    //    string color = "";
+    //    if(GlobalVariables.currentPlayer == "white")
+    //    {
+    //        color = "black";
+    //    }
+    //    else
+    //    {
+    //        color = "white";
+    //    }
+    //    game.Create(move.PieceTaken, 0, 0, "white");
+    //    chessman.PutPieceOnBoard(PieceTypeConvert(move.PieceTaken), color);
+    //}
+
+    //public Sprite PieceTypeConvert(string pieceName)
+    //{
+    //    switch (pieceName)
+    //    {
+    //        case "black_queen":
+    //            return black_queen;
+    //        case "white_queen":
+    //            return white_queen;
+    //        case "black_knight":
+    //            return black_knight;
+    //        case "white_knight":
+    //            return white_knight;
+    //        case "black_bishop":
+    //            return black_bishop;
+    //        case "white_bishop":
+    //            return white_bishop;
+    //        case "black_rook":
+    //            return black_rook;
+    //        case "white_rook":
+    //            return white_rook;
+    //        case "black_pawn":
+    //            return black_pawn;
+    //        case "white_pawn":
+    //            return white_pawn;
+    //    }
+    //    return white_pawn;
+    //}
 }

@@ -25,6 +25,7 @@ public class MovePlate : MonoBehaviour
 
     public void OnMouseUp()
     {
+        Debug.Log(reference);
         MakeMove(matrixX, matrixY, reference);
         //Updates the Database
         GameHelper gameHelper = new GameHelper();
@@ -98,6 +99,11 @@ public class MovePlate : MonoBehaviour
     public GameObject GetReference()
     {
         return reference;
+    }
+
+    public void Test()
+    {
+        Debug.Log("Test");
     }
 
 }
