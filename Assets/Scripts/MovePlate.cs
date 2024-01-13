@@ -25,7 +25,6 @@ public class MovePlate : MonoBehaviour
 
     public void OnMouseUp()
     {
-        Debug.Log(reference);
         MakeMove(matrixX, matrixY, reference);
         //Updates the Database
         GameHelper gameHelper = new GameHelper();
@@ -52,7 +51,7 @@ public class MovePlate : MonoBehaviour
 
             //destroys pieces when taken
             Destroy(cp);
-            GlobalVariables.CurrentPieceTaken = cp.ToString();
+            GlobalVariables.CurrentPieceTaken = gameHelper.FixStringFormat(cp.ToString());
         }
         else
         {
@@ -100,10 +99,4 @@ public class MovePlate : MonoBehaviour
     {
         return reference;
     }
-
-    public void Test()
-    {
-        Debug.Log("Test");
-    }
-
 }

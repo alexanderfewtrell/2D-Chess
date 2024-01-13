@@ -161,4 +161,32 @@ public class GameHelper
         string CompleteCoords = XCoords + YCoords;
         return CompleteCoords;
     }
+
+    public string FixStringFormat(string pieceName)
+    {
+        switch (pieceName)
+        {
+            case "black_queen (UnityEngine.GameObject)":
+                return "black_queen";
+            case "white_queen (UnityEngine.GameObject)":
+                return "white_queen";
+            case "black_knight (UnityEngine.GameObject)":
+                return "black_knight";
+            case "white_knight (UnityEngine.GameObject)":
+                return "white_knight";
+            case "black_bishop (UnityEngine.GameObject)":
+                return "black_bishop";
+            case "white_bishop (UnityEngine.GameObject)":
+                return "white_bishop";
+            case "black_rook (UnityEngine.GameObject)":
+                return "black_rook";
+            case "white_rook (UnityEngine.GameObject)":
+                return "white_rook";
+            case "black_pawn (UnityEngine.GameObject)":
+                return "black_pawn";
+            case "white_pawn (UnityEngine.GameObject)":
+                return "white_pawn";
+        }
+        return "white_pawn";
+    }
 }

@@ -7,8 +7,8 @@ public class Game : MonoBehaviour
     // creates the chesspiece game object that will be used for all of the pieces
     public GameObject chesspiece;
     private GameObject[,] positions = new GameObject[8, 8];
-    private GameObject[] playerBlack = new GameObject[16];
-    private GameObject[] playerWhite = new GameObject[16];
+    public GameObject[] playerBlack = new GameObject[16];
+    public GameObject[] playerWhite = new GameObject[16];
 
     //sets the gameOver variable to false as the game is being played
     private bool gameOver = false;
@@ -20,16 +20,19 @@ public class Game : MonoBehaviour
         playerWhite = new GameObject[]
         {
             Create("white_rook",0,0,"white"),
-            Create("white_knight",1,0,"white"), 
-            Create("white_bishop",2,0,"white"), 
+            Create("white_knight",1,0,"white"),
+            Create("white_bishop",2,0,"white"),
             Create("white_queen",3,0,"white"),
-            Create("white_king",4,0,"white"), 
-            Create("white_bishop",5,0,"white"), 
-            Create("white_knight",6,0,"white"), 
+            Create("white_king",4,0,"white"),
+            Create("white_bishop",5,0,"white"),
+            Create("white_knight",6,0,"white"),
             Create("white_rook",7,0,"white"),
             Create("white_pawn",0,1,"white"), Create("white_pawn",1,1,"white"), Create("white_pawn",2,1,"white"), Create("white_pawn",3,1,"white"),
-            Create("white_pawn",4,1,"white"), Create("white_pawn",5,1,"white"), Create("white_pawn",6,1,"white"), Create("white_pawn",7,1,"white") };
-        playerBlack = new GameObject[]{
+            Create("white_pawn",4,1,"white"), Create("white_pawn",5,1,"white"), Create("white_pawn",6,1,"white"), Create("white_pawn",7,1,"white")
+        };
+       
+        playerBlack = new GameObject[]
+        {
             Create("black_rook",0,7,"black"),
             Create("black_knight",1,7,"black"),
             Create("black_bishop",2,7,"black"), 
@@ -39,19 +42,26 @@ public class Game : MonoBehaviour
             Create("black_knight",6,7,"black"), 
             Create("black_rook",7,7,"black"),
             Create("black_pawn",0,6,"black"), Create("black_pawn",1,6,"black"), Create("black_pawn",2,6,"black"), Create("black_pawn",3,6,"black"),
-            Create("black_pawn",4,6,"black"), Create("black_pawn",5,6,"black"), Create("black_pawn",6,6,"black"), Create("black_pawn",7,6,"black") };
+            Create("black_pawn",4,6,"black"), Create("black_pawn",5,6,"black"), Create("black_pawn",6,6,"black"), Create("black_pawn",7,6,"black") 
+        };
 
         //sets the pieces positions
-        for (int i = 0; i < playerBlack.Length; i++)
-        {
-            SetPosition(playerBlack[i]);
-            SetPosition(playerWhite[i]);
-        }
+        SetStartingPosition();
+
         GameHelper gameHelper = new GameHelper();
         string gameName = gameHelper.CreateGameName();
         DataAccess dataAccess = new DataAccess();
         dataAccess.NewDataBase();
         GlobalVariables.GameId = dataAccess.AddGameName(gameName);
+    }
+
+    public void SetStartingPosition()
+    {
+        for (int i = 0; i < playerBlack.Length; i++)
+        {
+            SetPosition(playerBlack[i]);
+            SetPosition(playerWhite[i]);
+        }
     }
 
     //creates the objects for all of the pieces
