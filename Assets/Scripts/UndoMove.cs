@@ -32,16 +32,18 @@ public class UndoMove
         controller = GameObject.FindGameObjectWithTag("GameController");
         GameObject cp = controller.GetComponent<Game>().GetPosition(EndXCoord, EndYCoord);
 
-        Debug.Log(StartXCoord);
-        Debug.Log(StartYCoord);
-        Debug.Log(cp);
-
         Chessman chessman = cp.GetComponent<Chessman>();  
         chessman.MovePlateSpawn(StartXCoord, StartYCoord);
 
-        MovePlate movePlateScript = new MovePlate();
-        //MovePlate movePlateScript = movePlate.GetComponent<MovePlate>();
+        GameObject movePlateObject = GameObject.FindGameObjectWithTag("MovePlate");
+        MovePlate movePlateScript = movePlateObject.GetComponent<MovePlate>();
         movePlateScript.MakeMove(StartXCoord, StartYCoord, cp);
+
+        //recreates the piece if one was taken
+        //if(move.PieceTaken != "none")
+        //{
+        //    ReCreatePiece(EndXCoord, EndYCoord);
+        //}
 
         //delete the last row of the data base to finish the undo move
         dataAccess.DeleteLastRow(move.MoveId);
@@ -69,50 +71,51 @@ public class UndoMove
         return RealYCoord;
     }
 
-    //public void ReCreatePiece(int x, int y)
-    //{
-    //    DataAccess dataAccess = new DataAccess();
-    //    Move move = dataAccess.GetLastRowData(GlobalVariables.GameId);
-    //    Chessman chessman = new Chessman();
-    //    Game game = new Game();
-    //    string color = "";
-    //    if(GlobalVariables.currentPlayer == "white")
-    //    {
-    //        color = "black";
-    //    }
-    //    else
-    //    {
-    //        color = "white";
-    //    }
-    //    game.Create(move.PieceTaken, 0, 0, "white");
-    //    chessman.PutPieceOnBoard(PieceTypeConvert(move.PieceTaken), color);
-    //}
+    public void ReCreatePiece(int x, int y)
+    {
+        DataAccess dataAccess = new DataAccess();
+        Move move = dataAccess.GetLastRowData(GlobalVariables.GameId);
+        Chessman chessman = new Chessman();
+        Game game = new Game();
+        string color = "";
+        if (GlobalVariables.currentPlayer == "white")
+        {
+            color = "black";
+        }
+        else
+        {
+            color = "white";
+        }
+        //GameObject chesspiece = move.PieceTaken
+        game.Create(move.PieceTaken, 0, 0, "white");
+        chessman.PutPieceOnBoard(PieceTypeConvert(move.PieceTaken), color);
+    }
 
-    //public Sprite PieceTypeConvert(string pieceName)
-    //{
-    //    switch (pieceName)
-    //    {
-    //        case "black_queen":
-    //            return black_queen;
-    //        case "white_queen":
-    //            return white_queen;
-    //        case "black_knight":
-    //            return black_knight;
-    //        case "white_knight":
-    //            return white_knight;
-    //        case "black_bishop":
-    //            return black_bishop;
-    //        case "white_bishop":
-    //            return white_bishop;
-    //        case "black_rook":
-    //            return black_rook;
-    //        case "white_rook":
-    //            return white_rook;
-    //        case "black_pawn":
-    //            return black_pawn;
-    //        case "white_pawn":
-    //            return white_pawn;
-    //    }
-    //    return white_pawn;
-    //}
+    public Sprite PieceTypeConvert(string pieceName)
+    {
+        switch (pieceName)
+        {
+            case "black_queen":
+                return black_queen;
+            case "white_queen":
+                return white_queen;
+            case "black_knight":
+                return black_knight;
+            case "white_knight":
+                return white_knight;
+            case "black_bishop":
+                return black_bishop;
+            case "white_bishop":
+                return white_bishop;
+            case "black_rook":
+                return black_rook;
+            case "white_rook":
+                return white_rook;
+            case "black_pawn":
+                return black_pawn;
+            case "white_pawn":
+                return white_pawn;
+        }
+        return white_pawn;
+    }
 }
