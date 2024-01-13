@@ -33,7 +33,18 @@ public class UndoMove
         //recreates the piece if one was taken
         if (move.PieceTaken != "none")
         {
+            GameHelper gameHelper = new GameHelper();
             ReCreatePiece(EndXCoord, EndYCoord, move.PieceTaken);
+            if (GlobalVariables.currentPlayer == "white")
+            {
+                GlobalVariables.WhiteScore = GlobalVariables.WhiteScore - gameHelper.GetAdditionalScore(move.PieceTaken);
+                dataAccess.UpdateScore(GlobalVariables.WhiteScore, GlobalVariables.currentPlayer);
+            }
+            else
+            {
+                GlobalVariables.BlackScore = GlobalVariables.BlackScore - gameHelper.GetAdditionalScore(move.PieceTaken);
+                dataAccess.UpdateScore(GlobalVariables.BlackScore, GlobalVariables.currentPlayer);
+            }
         }
 
         //delete the last row of the data base to finish the undo move

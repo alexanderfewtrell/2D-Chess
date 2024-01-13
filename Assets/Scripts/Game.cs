@@ -60,6 +60,9 @@ public class Game : MonoBehaviour
         for (int i = 0; i < playerBlack.Length; i++)
         {
             SetPosition(playerBlack[i]);
+        }
+        for (int i = 0; i < playerWhite.Length; i++)
+        {
             SetPosition(playerWhite[i]);
         }
     }
