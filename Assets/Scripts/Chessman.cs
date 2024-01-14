@@ -34,20 +34,25 @@ public class Chessman : MonoBehaviour
         //puts all of the pieces on the board
         switch (this.name)
         {
-            case "black_queen": this.GetComponent<SpriteRenderer>().sprite = black_queen; player = "black"; break;
-            case "black_knight": this.GetComponent<SpriteRenderer>().sprite = black_knight; player = "black"; break;
-            case "black_bishop": this.GetComponent<SpriteRenderer>().sprite = black_bishop; player = "black"; break;
-            case "black_king": this.GetComponent<SpriteRenderer>().sprite = black_king; player = "black"; break;
-            case "black_rook": this.GetComponent<SpriteRenderer>().sprite = black_rook; player = "black"; break;
-            case "black_pawn": this.GetComponent<SpriteRenderer>().sprite = black_pawn; player = "black"; break;
+            case "black_queen": PutPieceOnBoard(black_queen, "black"); break;
+            case "black_knight": PutPieceOnBoard(black_knight, "black"); break;
+            case "black_bishop": PutPieceOnBoard(black_bishop, "black"); break;
+            case "black_king": PutPieceOnBoard(black_king, "black"); break;
+            case "black_rook": PutPieceOnBoard(black_rook, "black"); break;
+            case "black_pawn": PutPieceOnBoard(black_pawn, "black"); break;
 
-            case "white_queen": this.GetComponent<SpriteRenderer>().sprite = white_queen; player = "white"; break;
-            case "white_knight": this.GetComponent<SpriteRenderer>().sprite = white_knight; player = "white"; break;
-            case "white_bishop": this.GetComponent<SpriteRenderer>().sprite = white_bishop; player = "white"; break;
-            case "white_king": this.GetComponent<SpriteRenderer>().sprite = white_king; player = "white"; break;
-            case "white_rook": this.GetComponent<SpriteRenderer>().sprite = white_rook; player = "white"; break;
-            case "white_pawn": this.GetComponent<SpriteRenderer>().sprite = white_pawn; player = "white"; break;
+            case "white_queen": PutPieceOnBoard(white_queen, "white"); break;
+            case "white_knight": PutPieceOnBoard(white_knight, "white"); break;
+            case "white_bishop": PutPieceOnBoard(white_bishop, "white"); break;
+            case "white_king": PutPieceOnBoard(white_king, "white"); break;
+            case "white_rook": PutPieceOnBoard(white_rook, "white"); break;
+            case "white_pawn": PutPieceOnBoard(white_pawn, "white"); break;
         }
+    }
+
+    public void PutPieceOnBoard(Sprite pieceName, string color)
+    {
+        this.GetComponent<SpriteRenderer>().sprite = pieceName; player = color;
     }
 
     public void SetCoords()
@@ -168,7 +173,7 @@ public class Chessman : MonoBehaviour
                 //if the pawn is in its starting position it spawns 2 move plates
                 if (yBoard == 6)
                 {
-                    PawnDoubleMovePlate(xBoard, yBoard - 2);
+                    BlackPawnDoubleMovePlate(xBoard, yBoard - 2);
                     PawnMovePlate(xBoard, yBoard - 1);
                 }
 
@@ -184,7 +189,7 @@ public class Chessman : MonoBehaviour
                 //if the pawn is in its starting position it spawns 2 move plates
                 if (yBoard == 1)
                 {
-                    PawnDoubleMovePlate(xBoard, yBoard + 2);
+                    WhitePawnDoubleMovePlate(xBoard, yBoard + 2);
                     PawnMovePlate(xBoard, yBoard + 1);
                 }
 
@@ -274,12 +279,25 @@ public class Chessman : MonoBehaviour
         }
     }
 
-    public void PawnDoubleMovePlate(int x, int y)
+    public void WhitePawnDoubleMovePlate(int x, int y)
     {
         Game sc = controller.GetComponent<Game>();
         if (sc.PositionOnBoard(x, y))
         {
-            if (sc.GetPosition(x, y) == null)
+            if (sc.GetPosition(x, y) == null && sc.GetPosition(x, y - 1) == null)
+            {
+                //spawns in move plate if the square is empty
+                MovePlateSpawn(x, y);
+            }
+        }
+    }
+
+    public void BlackPawnDoubleMovePlate(int x, int y)
+    {
+        Game sc = controller.GetComponent<Game>();
+        if (sc.PositionOnBoard(x, y))
+        {
+            if (sc.GetPosition(x, y) == null && sc.GetPosition(x, y + 1) == null)
             {
                 //spawns in move plate if the square is empty
                 MovePlateSpawn(x, y);
