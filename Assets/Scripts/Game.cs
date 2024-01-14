@@ -59,11 +59,17 @@ public class Game : MonoBehaviour
     {
         for (int i = 0; i < playerBlack.Length; i++)
         {
-            SetPosition(playerBlack[i]);
+            if (playerBlack[i] != null)
+            {
+                SetPosition(playerBlack[i]);
+            }
         }
         for (int i = 0; i < playerWhite.Length; i++)
         {
-            SetPosition(playerWhite[i]);
+            if(playerWhite[i] != null)
+            {
+                SetPosition(playerWhite[i]);
+            }
         }
     }
 
@@ -227,9 +233,7 @@ public class Game : MonoBehaviour
                 //if any of the pieces can take the king the loop breaks
                 break;
             }
-
         }
-
     }
 
     public bool CanTakeKing(GameObject piece)
@@ -254,8 +258,12 @@ public class Game : MonoBehaviour
     //is called when the undo button is clicked
     public void UndoButtonClick()
     {
-        UndoMove undoMove = new UndoMove();
-        undoMove.GoBackMove();
+        DataAccess dataAccess = new DataAccess();
+        if (dataAccess.CheckIfTableEmpty(GlobalVariables.GameId))
+        {
+            UndoMove undoMove = new UndoMove();
+            undoMove.GoBackMove();
+        }
     }
 
     //is called when the quit button is clicked

@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class GameHelper
 {
@@ -188,5 +189,19 @@ public class GameHelper
                 return "white_pawn";
         }
         return "white_pawn";
+    }
+
+    public int CheckIfArrayLocationEmpty(GameObject[] listToCheck)
+    {
+        int i = 0;
+        foreach (GameObject obj in listToCheck)
+        {
+            if(obj == null)
+            {
+                return i;
+            }
+            i = i + 1;
+        }
+        return 100;
     }
 }

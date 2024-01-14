@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -79,21 +80,26 @@ public class UndoMove
         Game game = controller.GetComponent<Game>();
 
         string color = "";
+        GameHelper gameHelper = new GameHelper();
         if (GlobalVariables.currentPlayer == "white")
         {
             color = "black";
-            game.playerBlack = new GameObject[]
+            GameObject[] newPlayerBlackPiece = new GameObject[]
             {
-                game.Create(piece,x,y,color),
+                game.Create(piece,x,y,color)
             };
+            
+            game.playerBlack[gameHelper.CheckIfArrayLocationEmpty(game.playerBlack)] = newPlayerBlackPiece[0];
         }
-        else
+        else if (GlobalVariables.currentPlayer == "black")
         {
             color = "white";
-            game.playerWhite = new GameObject[]
+            GameObject[] newPlayerWhitePiece = new GameObject[]
             {
-                game.Create(piece,x,y,color),
+                game.Create(piece,x,y,color)
             };
+            
+            game.playerWhite[gameHelper.CheckIfArrayLocationEmpty(game.playerWhite)] = newPlayerWhitePiece[0];
         }
         game.SetStartingPosition();
     }

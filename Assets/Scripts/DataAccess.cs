@@ -179,4 +179,38 @@ public class DataAccess
 
         dbcon.Close();
     }
+
+    public bool CheckIfTableEmpty(long gameNameId)
+    {
+        IDbConnection dbcon = new SqliteConnection(connection);
+        dbcon.Open();
+
+        string CommandText = $"SELECT 1 FROM Moves WHERE GameNameId = {gameNameId} ORDER BY MoveId DESC LIMIT 1";
+
+        IDbCommand cmnd = dbcon.CreateCommand();
+        cmnd.CommandText = CommandText;
+
+        SqliteDataReader lastRowTable = (SqliteDataReader)cmnd.ExecuteReader();
+
+        string Exists = "";
+        if (lastRowTable.Read())
+        {
+            Exists = "true";
+        }
+        else
+        {
+            Exists = "false";
+        }
+
+        dbcon.Close();
+
+        if(Exists == "true")
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
