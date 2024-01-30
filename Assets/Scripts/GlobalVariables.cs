@@ -18,4 +18,6 @@ public class GlobalVariables : MonoBehaviour
     public static int BlackScore = 0;
 
     public static string currentPlayer = "white";
+
+    public static string Mode = "2Player";
 }

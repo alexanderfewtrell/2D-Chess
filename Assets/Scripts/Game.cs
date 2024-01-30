@@ -173,6 +173,15 @@ public class Game : MonoBehaviour
         Application.Quit();
     }
 
+    public void AIToggle()
+    {
+        Debug.Log("Button Clicked");
+        AIMove aiMove = new AIMove();
+        aiMove.ChangeMode();
+        Debug.Log(GlobalVariables.Mode);
+        aiMove.ChangeText();
+    }
+
     public void CheckCheck()
     {
         //sets the check variable to false
@@ -270,5 +279,10 @@ public class Game : MonoBehaviour
     public void QuitButtonClick()
     {
         QuitGame();
+    }
+
+    public void AIToggleButtonClick()
+    {
+        AIToggle();
     }
 }
