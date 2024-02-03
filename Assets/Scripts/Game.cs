@@ -180,6 +180,10 @@ public class Game : MonoBehaviour
         aiMove.ChangeMode();
         Debug.Log(GlobalVariables.Mode);
         aiMove.ChangeText();
+
+        chesspiece.GetComponent<Chessman>().DestroyMovePlates();
+
+        aiMove.MakeMove();
     }
 
     public void CheckCheck()

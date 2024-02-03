@@ -16,6 +16,9 @@ TagManager:
   - DataBaseTag
   - WhiteScoreTag
   - BlackScoreTag
+  - AIToggleButtonTextTag
+  - Undefined
+  - chesspieceTag
   layers:
   - Default
   - TransparentFX

@@ -91,17 +91,42 @@ public class Chessman : MonoBehaviour
 
     private void OnMouseUp()
     {
-        if (!controller.GetComponent<Game>().IsGameOver() && controller.GetComponent<Game>().GetCurrentPlayer() == player)
+        if (GlobalVariables.currentPlayer == "white")
         {
-            //Check = false;
-            controller.GetComponent<Game>().CheckCheck();
+            if (!controller.GetComponent<Game>().IsGameOver() && controller.GetComponent<Game>().GetCurrentPlayer() == player)
+            {
+                //Check = false;
+                controller.GetComponent<Game>().CheckCheck();
 
-            DestroyMovePlates();
+                DestroyMovePlates();
 
-            SetStartCoords(xBoard, yBoard);
+                SetStartCoords(xBoard, yBoard);
 
-            InitiateMovePlates();
+                InitiateMovePlates(this.name);
 
+            }
+        }
+        if(GlobalVariables.currentPlayer == "black")
+        {
+            if(GlobalVariables.Mode == "2Player")
+            {
+                if (!controller.GetComponent<Game>().IsGameOver() && controller.GetComponent<Game>().GetCurrentPlayer() == player)
+                {
+                    //Check = false;
+                    controller.GetComponent<Game>().CheckCheck();
+
+                    DestroyMovePlates();
+
+                    SetStartCoords(xBoard, yBoard);
+
+                    InitiateMovePlates(this.name);
+
+                }
+            }
+            if(GlobalVariables.Mode == "AI")
+            {
+
+            }
         }
     }
 
@@ -125,11 +150,11 @@ public class Chessman : MonoBehaviour
 
 
     #region MovePlates
-    public void InitiateMovePlates()
+    public void InitiateMovePlates(string piece)
     {
         //creates different move plate patterns depending on which piece is selected
-        GlobalVariables.CurrentPiece = this.name;
-        switch (this.name)
+        GlobalVariables.CurrentPiece = piece.ToString();
+        switch (piece)
         {
             case "black_queen":
             case "white_queen":
@@ -168,6 +193,7 @@ public class Chessman : MonoBehaviour
                 LineMovePlate(0, 1);
                 LineMovePlate(0, -1);
                 break;
+
 
             case "black_pawn":
                 //if the pawn is in its starting position it spawns 2 move plates
