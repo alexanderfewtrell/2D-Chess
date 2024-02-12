@@ -25,7 +25,7 @@ public class UndoMove
         GameObject cp = controller.GetComponent<Game>().GetPosition(EndXCoord, EndYCoord);
 
         Chessman chessman = cp.GetComponent<Chessman>();  
-        chessman.MovePlateSpawn(StartXCoord, StartYCoord);
+        chessman.MovePlateSpawn(StartXCoord, StartYCoord, cp);
 
         GameObject movePlateObject = GameObject.FindGameObjectWithTag("MovePlate");
         MovePlate movePlateScript = movePlateObject.GetComponent<MovePlate>();

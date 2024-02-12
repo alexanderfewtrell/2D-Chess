@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -42,15 +43,25 @@ public class AIMove
         }
     }
 
-    public GameObject[] CreateListOfMovePlates()
+    public void CreateAllMovePlates()
     {
         GameObject[] blackPieces = GameObject.FindGameObjectsWithTag("black");
+        List<GameObject> newBlackPieces = blackPieces.ToList();
+        GameHelper gameHelper = new GameHelper();
+        for (int i = 0; i < blackPieces.Length; i++)
+        {
+            if (gameHelper.FixStringFormat(newBlackPieces[i].ToString()) == GlobalVariables.CurrentPieceTaken && newBlackPieces[i].GetComponent<Chessman>().GetXBoard() == GlobalVariables.CurrentPieceTakenXCoord && newBlackPieces[i].GetComponent<Chessman>().GetYBoard() == GlobalVariables.CurrentPieceTakenYCoord)
+            {
+                newBlackPieces.Remove(newBlackPieces[i]);
+                break;
+            }
+        }
 
         Controller = GameObject.FindGameObjectWithTag("GameController");
 
-        for (int i = 0; i < blackPieces.Length; i++)
+        for (int i = 0; i < newBlackPieces.Count; i++)
         {
-            var piece = blackPieces[i];
+            var piece = newBlackPieces[i];
             int PieceXCoord = piece.GetComponent<Chessman>().GetXBoard();
             int PieceYCoord = piece.GetComponent<Chessman>().GetYBoard();
 
@@ -58,22 +69,13 @@ public class AIMove
 
             Chessman chessman = cp.GetComponent<Chessman>();
 
-            chessman.InitiateMovePlates(cp.name);
+            chessman.InitiateMovePlates(cp.name, cp);
         }
-
-        GameObject[] movePlates = GameObject.FindGameObjectsWithTag("MovePlate");
-
-        return movePlates;
     }
 
-    public Vector3 FindRandomMovePlate()
-    {
-        GameObject[] movePlatesList = CreateListOfMovePlates();
-
-        int RandomMovePlateNumber = random.Next(1, movePlatesList.Length);
-        Debug.Log(RandomMovePlateNumber);
-
-        GameObject FinalMovePlate = movePlatesList[RandomMovePlateNumber];
+    public Vector3 FindRandomMovePlate(int randomNumber, GameObject[] movePlatesList)
+    { 
+        GameObject FinalMovePlate = movePlatesList[randomNumber];
 
         Transform FMPTransform = FinalMovePlate.transform;
 
@@ -82,6 +84,11 @@ public class AIMove
         Debug.Log(FMPPosition);
 
         return FMPPosition;
+    }
+
+    public int PickRandomNumber(int length)
+    {
+        return random.Next(1, length);
     }
 
     public int ConvertToXBoardCoords(float x)
@@ -106,16 +113,26 @@ public class AIMove
 
     public void MakeMove()
     {
-        Debug.Log("MakeMove)");
+        CreateAllMovePlates();
+        GlobalVariables.RandomNumber = PickRandomNumber(GlobalVariables.AIMoveDetailsList.Count);
 
-        Vector3 RandomMovePlate = FindRandomMovePlate();
-        int MovePlateXCoord = ConvertToXBoardCoords(RandomMovePlate.x);
-        int MovePlateYCoord = ConvertToYBoardCoords(RandomMovePlate.y);
+        int MovePlateXCoord = ConvertToXBoardCoords(GlobalVariables.AIMoveDetailsList[GlobalVariables.RandomNumber].MovePlateXCoord);
+        int MovePlateYCoord = ConvertToYBoardCoords(GlobalVariables.AIMoveDetailsList[GlobalVariables.RandomNumber].MovePlateYCoord);
 
-        Debug.Log(MovePlateXCoord);
-        Debug.Log(MovePlateYCoord);
+        GameObject Piece = GlobalVariables.AIMoveDetailsList[GlobalVariables.RandomNumber].Piece;
+        bool Attack = GlobalVariables.AIMoveDetailsList[GlobalVariables.RandomNumber].Piece;
 
-        //MovePlate movePlate = Controller.GetComponent<MovePlate>();
-        //movePlate.MakeMove(MovePlateXCoord, MovePlateYCoord, piece);
+        GameObject cp = Controller.GetComponent<Game>().GetPosition(Piece.GetComponent<Chessman>().GetXBoard(), Piece.GetComponent<Chessman>().GetYBoard());
+
+        Chessman chessman = cp.GetComponent<Chessman>();
+        chessman.DestroyMovePlates();
+
+        if (Attack) chessman.MovePlateAttackSpawn(MovePlateXCoord, MovePlateYCoord, Piece);
+
+        else chessman.MovePlateSpawn(MovePlateXCoord, MovePlateYCoord, Piece);
+
+        GameObject movePlateObject = GameObject.FindGameObjectWithTag("MovePlate");
+        MovePlate movePlateScript = movePlateObject.GetComponent<MovePlate>();
+        movePlateScript.MakeMove(MovePlateXCoord, MovePlateYCoord, Piece);
     }
 }

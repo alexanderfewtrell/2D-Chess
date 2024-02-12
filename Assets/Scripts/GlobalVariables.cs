@@ -12,6 +12,8 @@ public class GlobalVariables : MonoBehaviour
     public static int YStartCoord = 0;
     public static string CurrentPiece = "";
     public static string CurrentPieceTaken = "none";
+    public static int CurrentPieceTakenXCoord = 0;
+    public static int CurrentPieceTakenYCoord = 0;
 
     public static long GameId = 0;
     public static int WhiteScore = 0;
@@ -20,4 +22,10 @@ public class GlobalVariables : MonoBehaviour
     public static string currentPlayer = "white";
 
     public static string Mode = "2Player";
+
+    public static List<GameObject> MovePlateGameObjectList = new List<GameObject>();
+
+    public static List<AIMoveDetails> AIMoveDetailsList = new List<AIMoveDetails>();
+
+    public static int RandomNumber = 0;
 }

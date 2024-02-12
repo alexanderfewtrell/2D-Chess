@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Threading;
 
 public class Game : MonoBehaviour
 {
@@ -137,6 +138,13 @@ public class Game : MonoBehaviour
         {
             GlobalVariables.currentPlayer = "white";
         }
+
+        //if(GlobalVariables.currentPlayer == "black" && GlobalVariables.Mode == "AI")
+        //{
+        //    AIMove aiMove = new AIMove();
+        //    aiMove.MakeMove();
+        //    //Thread.Sleep(1000);
+        //}
     }
     
     public void Update()
@@ -175,15 +183,15 @@ public class Game : MonoBehaviour
 
     public void AIToggle()
     {
-        Debug.Log("Button Clicked");
+        //Debug.Log("Button Clicked");
         AIMove aiMove = new AIMove();
         aiMove.ChangeMode();
-        Debug.Log(GlobalVariables.Mode);
+        //Debug.Log(GlobalVariables.Mode);
         aiMove.ChangeText();
 
         chesspiece.GetComponent<Chessman>().DestroyMovePlates();
 
-        aiMove.MakeMove();
+        //aiMove.MakeMove();
     }
 
     public void CheckCheck()
