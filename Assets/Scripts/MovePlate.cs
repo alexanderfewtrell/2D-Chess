@@ -44,9 +44,6 @@ public class MovePlate : MonoBehaviour
 
     public void MakeMove(int x, int y, GameObject chessPiece)
     {
-        Debug.Log("X" + x + GlobalVariables.Mode);
-        Debug.Log("Y" + y + GlobalVariables.Mode);
-        Debug.Log(chessPiece + GlobalVariables.Mode);
         controller = GameObject.FindGameObjectWithTag("GameController");
         GameHelper gameHelper = new GameHelper();
 

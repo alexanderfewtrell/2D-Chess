@@ -81,8 +81,6 @@ public class AIMove
 
         Vector3 FMPPosition = FMPTransform.position;
 
-        Debug.Log(FMPPosition);
-
         return FMPPosition;
     }
 
