@@ -63,9 +63,6 @@ public class MovePlate : MonoBehaviour
                 //if (cp.name == "black_king") controller.GetComponent<Game>().Winner("white");
 
                 gameHelper.UpdateScore(cp.name);
-                Debug.Log("Update Score" + cp.name);
-
-                //destroys pieces when taken
                 Destroy(cp);
                 GlobalVariables.CurrentPieceTaken = gameHelper.FixStringFormat(cp.ToString());
                 GlobalVariables.CurrentPieceTakenXCoord = x;
@@ -86,9 +83,7 @@ public class MovePlate : MonoBehaviour
                 {
                     GameObject cp = controller.GetComponent<Game>().GetPosition(x, y);
                     gameHelper.UpdateScore(cp.name);
-                    Debug.Log("BlackAI Update Score" + cp.name);
                     Destroy(cp);
-                    //Debug.Log("Destroy"+cp.ToString());
                     GlobalVariables.CurrentPieceTaken = gameHelper.FixStringFormat(cp.ToString());
                     GlobalVariables.CurrentPieceTakenXCoord = x;
                     GlobalVariables.CurrentPieceTakenYCoord = y;

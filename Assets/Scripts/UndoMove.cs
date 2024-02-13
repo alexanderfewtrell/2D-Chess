@@ -80,7 +80,6 @@ public class UndoMove
         Chessman chessman = controller.GetComponent<Chessman>();
         Game game = controller.GetComponent<Game>();
 
-        //string color = "";
         GameHelper gameHelper = new GameHelper();
 
         string pieceColor = piece.Substring(0, Math.Min(piece.Length, 5));

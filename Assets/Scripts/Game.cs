@@ -138,13 +138,6 @@ public class Game : MonoBehaviour
         {
             GlobalVariables.currentPlayer = "white";
         }
-
-        //if(GlobalVariables.currentPlayer == "black" && GlobalVariables.Mode == "AI")
-        //{
-        //    AIMove aiMove = new AIMove();
-        //    aiMove.MakeMove();
-        //    //Thread.Sleep(1000);
-        //}
     }
     
     public void Update()
@@ -183,15 +176,11 @@ public class Game : MonoBehaviour
 
     public void AIToggle()
     {
-        //Debug.Log("Button Clicked");
         AIMove aiMove = new AIMove();
         aiMove.ChangeMode();
-        //Debug.Log(GlobalVariables.Mode);
         aiMove.ChangeText();
 
         chesspiece.GetComponent<Chessman>().DestroyMovePlates();
-
-        //aiMove.MakeMove();
     }
 
     public void CheckCheck()

@@ -96,7 +96,6 @@ public class Chessman : MonoBehaviour
         {
             if (!controller.GetComponent<Game>().IsGameOver() && controller.GetComponent<Game>().GetCurrentPlayer() == player)
             {
-                //Check = false;
                 controller.GetComponent<Game>().CheckCheck();
 
                 DestroyMovePlates();
@@ -106,7 +105,6 @@ public class Chessman : MonoBehaviour
                 GameObject cp = controller.GetComponent<Game>().GetPosition(xBoard, yBoard);
 
                 InitiateMovePlates(this.name, cp);
-
             }
         }
         if(GlobalVariables.currentPlayer == "black")
@@ -115,7 +113,6 @@ public class Chessman : MonoBehaviour
             {
                 if (!controller.GetComponent<Game>().IsGameOver() && controller.GetComponent<Game>().GetCurrentPlayer() == player)
                 {
-                    //Check = false;
                     controller.GetComponent<Game>().CheckCheck();
 
                     DestroyMovePlates();
@@ -125,7 +122,6 @@ public class Chessman : MonoBehaviour
                     GameObject cp = controller.GetComponent<Game>().GetPosition(xBoard, yBoard);
 
                     InitiateMovePlates(this.name, cp);
-
                 }
             }
         }
@@ -461,7 +457,6 @@ public class Chessman : MonoBehaviour
         //if the square is empty a Check plate is spawned
         while (sc.PositionOnBoard(x, y) && sc.GetPosition(x, y) == null)
         {
-            //CheckPlateSpawn(x, y);
             x += xIncrement;
             y += yIncrement;
         }
