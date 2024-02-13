@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class MovePlate : MonoBehaviour
@@ -25,38 +26,74 @@ public class MovePlate : MonoBehaviour
 
     public void OnMouseUp()
     {
+        GlobalVariables.Undo = false;
         MakeMove(matrixX, matrixY, reference);
         //Updates the Database
         GameHelper gameHelper = new GameHelper();
         DataAccess dataAccess = new DataAccess();
         dataAccess.InsertMove(GlobalVariables.CurrentPiece, gameHelper.CompleteCoordinates(GlobalVariables.XStartCoord.ToString(), GlobalVariables.YStartCoord.ToString()),
             gameHelper.CompleteCoordinates(matrixX.ToString(), matrixY.ToString()), GlobalVariables.GameId, GlobalVariables.CurrentPieceTaken);
+        ///////////////
+        //END OF TURN//
+        ///////////////
+        if (GlobalVariables.currentPlayer == "black" && GlobalVariables.Mode == "AI")
+        {
+            AIMove aiMove = new AIMove();
+            GlobalVariables.Undo = false;
+            aiMove.MakeMove();
+            dataAccess.InsertMove(GlobalVariables.CurrentPiece, gameHelper.CompleteCoordinates(GlobalVariables.AIMovePieceStartXCoord.ToString(), GlobalVariables.AIMovePieceStartYCoord.ToString()),
+            gameHelper.CompleteCoordinates(GlobalVariables.AIMovePlateXCoord.ToString(), GlobalVariables.AIMovePlateYCoord.ToString()), GlobalVariables.GameId, GlobalVariables.CurrentPieceTaken);
+        }
     }
 
     public void MakeMove(int x, int y, GameObject chessPiece)
     {
         controller = GameObject.FindGameObjectWithTag("GameController");
         GameHelper gameHelper = new GameHelper();
-
+        bool breakIf = false;
         //checks if the king has been taken
         if (attack)
         {
             GameObject cp = controller.GetComponent<Game>().GetPosition(x, y);
 
-            if (cp.name == "white_king") controller.GetComponent<Game>().Winner("black");
+            if (cp != null)
+            {
+                //if (cp.name == "white_king") controller.GetComponent<Game>().Winner("black");
 
-            if (cp.name == "black_king") controller.GetComponent<Game>().Winner("white");
+                //if (cp.name == "black_king") controller.GetComponent<Game>().Winner("white");
 
-            gameHelper.UpdateScore(cp.name);
-
-            //destroys pieces when taken
-            Destroy(cp);
-            GlobalVariables.CurrentPieceTaken = gameHelper.FixStringFormat(cp.ToString());
+                gameHelper.UpdateScore(cp.name);
+                Destroy(cp);
+                GlobalVariables.CurrentPieceTaken = gameHelper.FixStringFormat(cp.ToString());
+                GlobalVariables.CurrentPieceTakenXCoord = x;
+                GlobalVariables.CurrentPieceTakenYCoord = y;
+                breakIf = true;
+            }
         }
         else
         {
             //if there is no piece taken then CurrentPieceTaken is set to none
             GlobalVariables.CurrentPieceTaken = "none";
+        }
+        if (GlobalVariables.Undo == false)
+        {
+            if (GlobalVariables.currentPlayer == "black" && GlobalVariables.Mode == "AI" && breakIf == false)
+            {
+                if (GlobalVariables.AIMoveDetailsList[GlobalVariables.RandomNumber].Attack)
+                {
+                    GameObject cp = controller.GetComponent<Game>().GetPosition(x, y);
+                    gameHelper.UpdateScore(cp.name);
+                    Destroy(cp);
+                    GlobalVariables.CurrentPieceTaken = gameHelper.FixStringFormat(cp.ToString());
+                    GlobalVariables.CurrentPieceTakenXCoord = x;
+                    GlobalVariables.CurrentPieceTakenYCoord = y;
+                }
+                else
+                {
+                    //if there is no piece taken then CurrentPieceTaken is set to none
+                    GlobalVariables.CurrentPieceTaken = "none";
+                }
+            }
         }
 
         //checks if any pieces can take the king
@@ -77,11 +114,15 @@ public class MovePlate : MonoBehaviour
         //checks if any pieces can take the king
         controller.GetComponent<Game>().CheckCheck();
 
+        //Destroyes any leftover move plates
+        chessPiece.GetComponent<Chessman>().DestroyMovePlates();
+
+        GlobalVariables.MovePlateGameObjectList.Clear();
+
         //changes the player to the opposite player
         controller.GetComponent<Game>().NextTurn();
 
-        //Destroyes any leftover move plates
-        chessPiece.GetComponent<Chessman>().DestroyMovePlates();
+        GlobalVariables.AIMoveDetailsList.Clear();
     }
 
     public void SetCoords(int x, int y)

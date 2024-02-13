@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Threading;
 
 public class Game : MonoBehaviour
 {
@@ -173,6 +174,15 @@ public class Game : MonoBehaviour
         Application.Quit();
     }
 
+    public void AIToggle()
+    {
+        AIMove aiMove = new AIMove();
+        aiMove.ChangeMode();
+        aiMove.ChangeText();
+
+        chesspiece.GetComponent<Chessman>().DestroyMovePlates();
+    }
+
     public void CheckCheck()
     {
         //sets the check variable to false
@@ -270,5 +280,10 @@ public class Game : MonoBehaviour
     public void QuitButtonClick()
     {
         QuitGame();
+    }
+
+    public void AIToggleButtonClick()
+    {
+        AIToggle();
     }
 }

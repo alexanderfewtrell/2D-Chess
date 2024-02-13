@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
 
 public class Chessman : MonoBehaviour
 {
@@ -91,17 +92,38 @@ public class Chessman : MonoBehaviour
 
     private void OnMouseUp()
     {
-        if (!controller.GetComponent<Game>().IsGameOver() && controller.GetComponent<Game>().GetCurrentPlayer() == player)
+        if (GlobalVariables.currentPlayer == "white")
         {
-            //Check = false;
-            controller.GetComponent<Game>().CheckCheck();
+            if (!controller.GetComponent<Game>().IsGameOver() && controller.GetComponent<Game>().GetCurrentPlayer() == player)
+            {
+                controller.GetComponent<Game>().CheckCheck();
 
-            DestroyMovePlates();
+                DestroyMovePlates();
 
-            SetStartCoords(xBoard, yBoard);
+                SetStartCoords(xBoard, yBoard);
 
-            InitiateMovePlates();
+                GameObject cp = controller.GetComponent<Game>().GetPosition(xBoard, yBoard);
 
+                InitiateMovePlates(this.name, cp);
+            }
+        }
+        if(GlobalVariables.currentPlayer == "black")
+        {
+            if(GlobalVariables.Mode == "2Player")
+            {
+                if (!controller.GetComponent<Game>().IsGameOver() && controller.GetComponent<Game>().GetCurrentPlayer() == player)
+                {
+                    controller.GetComponent<Game>().CheckCheck();
+
+                    DestroyMovePlates();
+
+                    SetStartCoords(xBoard, yBoard);
+
+                    GameObject cp = controller.GetComponent<Game>().GetPosition(xBoard, yBoard);
+
+                    InitiateMovePlates(this.name, cp);
+                }
+            }
         }
     }
 
@@ -125,62 +147,86 @@ public class Chessman : MonoBehaviour
 
 
     #region MovePlates
-    public void InitiateMovePlates()
+    public void InitiateMovePlates(string piece, GameObject pieceObject)
     {
         //creates different move plate patterns depending on which piece is selected
-        GlobalVariables.CurrentPiece = this.name;
-        switch (this.name)
+        GlobalVariables.CurrentPiece = piece.ToString();
+        switch (piece)
         {
             case "black_queen":
+                LineMovePlate(1, 1, pieceObject);
+                LineMovePlate(1, -1, pieceObject);
+                LineMovePlate(-1, 1, pieceObject);
+                LineMovePlate(-1, -1, pieceObject);
+                LineMovePlate(1, 0, pieceObject);
+                LineMovePlate(-1, 0, pieceObject);
+                LineMovePlate(0, 1, pieceObject);
+                LineMovePlate(0, -1, pieceObject);
+                break;
             case "white_queen":
-                LineMovePlate(1, 1);
-                LineMovePlate(1, -1);
-                LineMovePlate(-1, 1);
-                LineMovePlate(-1, -1);
-                LineMovePlate(1, 0);
-                LineMovePlate(-1, 0);
-                LineMovePlate(0, 1);
-                LineMovePlate(0, -1);
+                LineMovePlate(1, 1, pieceObject);
+                LineMovePlate(1, -1, pieceObject);
+                LineMovePlate(-1, 1, pieceObject);
+                LineMovePlate(-1, -1, pieceObject);
+                LineMovePlate(1, 0, pieceObject);
+                LineMovePlate(-1, 0, pieceObject);
+                LineMovePlate(0, 1, pieceObject);
+                LineMovePlate(0, -1, pieceObject);
                 break;
 
             case "black_knight":
+                LMovePlate(pieceObject);
+                break;
             case "white_knight":
-                LMovePlate();
+                LMovePlate(pieceObject);
                 break;
 
             case "black_bishop":
+                LineMovePlate(1, 1, pieceObject);
+                LineMovePlate(1, -1, pieceObject);
+                LineMovePlate(-1, 1, pieceObject);
+                LineMovePlate(-1, -1, pieceObject);
+                break;
             case "white_bishop":
-                LineMovePlate(1, 1);
-                LineMovePlate(1, -1);
-                LineMovePlate(-1, 1);
-                LineMovePlate(-1, -1);
+                LineMovePlate(1, 1, pieceObject);
+                LineMovePlate(1, -1, pieceObject);
+                LineMovePlate(-1, 1, pieceObject);
+                LineMovePlate(-1, -1, pieceObject);
                 break;
 
             case "black_king":
+                SurroundMovePlate(pieceObject);
+                break;
             case "white_king":
-                SurroundMovePlate();
+                SurroundMovePlate(pieceObject);
                 break;
 
             case "black_rook":
-            case "white_rook":
-                LineMovePlate(1, 0);
-                LineMovePlate(-1, 0);
-                LineMovePlate(0, 1);
-                LineMovePlate(0, -1);
+                LineMovePlate(1, 0, pieceObject);
+                LineMovePlate(-1, 0, pieceObject);
+                LineMovePlate(0, 1, pieceObject);
+                LineMovePlate(0, -1, pieceObject);
                 break;
+            case "white_rook":
+                LineMovePlate(1, 0, pieceObject);
+                LineMovePlate(-1, 0, pieceObject);
+                LineMovePlate(0, 1, pieceObject);
+                LineMovePlate(0, -1, pieceObject);
+                break;
+
 
             case "black_pawn":
                 //if the pawn is in its starting position it spawns 2 move plates
                 if (yBoard == 6)
                 {
-                    BlackPawnDoubleMovePlate(xBoard, yBoard - 2);
-                    PawnMovePlate(xBoard, yBoard - 1);
+                    BlackPawnDoubleMovePlate(xBoard, yBoard - 2, pieceObject);
+                    PawnMovePlate(xBoard, yBoard - 1, pieceObject);
                 }
 
                 //if the pawn is not in its starting position it spawns its normal moveplates
                 if (yBoard != 6)
                 {
-                    PawnMovePlate(xBoard, yBoard - 1);
+                    PawnMovePlate(xBoard, yBoard - 1, pieceObject);
                 }
 
                 break;
@@ -189,21 +235,21 @@ public class Chessman : MonoBehaviour
                 //if the pawn is in its starting position it spawns 2 move plates
                 if (yBoard == 1)
                 {
-                    WhitePawnDoubleMovePlate(xBoard, yBoard + 2);
-                    PawnMovePlate(xBoard, yBoard + 1);
+                    WhitePawnDoubleMovePlate(xBoard, yBoard + 2, pieceObject);
+                    PawnMovePlate(xBoard, yBoard + 1, pieceObject);
                 }
 
                 //if the pawn is not in its starting position it spawns its normal moveplates
                 if (yBoard != 1)
                 {
-                    PawnMovePlate(xBoard, yBoard + 1);
+                    PawnMovePlate(xBoard, yBoard + 1, pieceObject);
                 }
                 break;
 
         }
     }
 
-    public void LineMovePlate(int xIncrement, int yIncrement)
+    public void LineMovePlate(int xIncrement, int yIncrement, GameObject pieceObject)
     {
         Game sc = controller.GetComponent<Game>();
 
@@ -214,7 +260,7 @@ public class Chessman : MonoBehaviour
         //if the square is empty a move plate is spawned
         while (sc.PositionOnBoard(x, y) && sc.GetPosition(x, y) == null)
         {
-            MovePlateSpawn(x, y);
+            MovePlateSpawn(x, y, pieceObject);
             x += xIncrement;
             y += yIncrement;
         }
@@ -226,38 +272,38 @@ public class Chessman : MonoBehaviour
 
             if (cp.name != "white_king" && cp.name != "black_king")
             {
-                MovePlateAttackSpawn(x, y);
+                MovePlateAttackSpawn(x, y, pieceObject);
             }
         }
     }
 
     //defines the knights movement pattern
-    public void LMovePlate()
+    public void LMovePlate(GameObject pieceObject)
     {
-        PointMovePlate(xBoard + 1, yBoard + 2);
-        PointMovePlate(xBoard - 1, yBoard + 2);
-        PointMovePlate(xBoard + 2, yBoard + 1);
-        PointMovePlate(xBoard + 2, yBoard - 1);
-        PointMovePlate(xBoard + 1, yBoard - 2);
-        PointMovePlate(xBoard - 1, yBoard - 2);
-        PointMovePlate(xBoard - 2, yBoard + 1);
-        PointMovePlate(xBoard - 2, yBoard - 1);
+        PointMovePlate(xBoard + 1, yBoard + 2, pieceObject);
+        PointMovePlate(xBoard - 1, yBoard + 2, pieceObject);
+        PointMovePlate(xBoard + 2, yBoard + 1, pieceObject);
+        PointMovePlate(xBoard + 2, yBoard - 1, pieceObject);
+        PointMovePlate(xBoard + 1, yBoard - 2, pieceObject);
+        PointMovePlate(xBoard - 1, yBoard - 2, pieceObject);
+        PointMovePlate(xBoard - 2, yBoard + 1, pieceObject);
+        PointMovePlate(xBoard - 2, yBoard - 1, pieceObject);
     }
 
     //defines the kings movement pattern
-    public void SurroundMovePlate()
+    public void SurroundMovePlate(GameObject pieceObject)
     {
-        PointMovePlate(xBoard, yBoard + 1);
-        PointMovePlate(xBoard, yBoard - 1);
-        PointMovePlate(xBoard - 1, yBoard - 1);
-        PointMovePlate(xBoard - 1, yBoard);
-        PointMovePlate(xBoard - 1, yBoard + 1);
-        PointMovePlate(xBoard + 1, yBoard - 1);
-        PointMovePlate(xBoard + 1, yBoard);
-        PointMovePlate(xBoard + 1, yBoard + 1);
+        PointMovePlate(xBoard, yBoard + 1, pieceObject);
+        PointMovePlate(xBoard, yBoard - 1, pieceObject);
+        PointMovePlate(xBoard - 1, yBoard - 1, pieceObject);
+        PointMovePlate(xBoard - 1, yBoard, pieceObject);
+        PointMovePlate(xBoard - 1, yBoard + 1, pieceObject);
+        PointMovePlate(xBoard + 1, yBoard - 1, pieceObject);
+        PointMovePlate(xBoard + 1, yBoard, pieceObject);
+        PointMovePlate(xBoard + 1, yBoard + 1, pieceObject);
     }
 
-    public void PointMovePlate(int x, int y)
+    public void PointMovePlate(int x, int y, GameObject pieceObject)
     {
         Game sc = controller.GetComponent<Game>();
         if (sc.PositionOnBoard(x, y))
@@ -267,19 +313,19 @@ public class Chessman : MonoBehaviour
             if (cp == null)
             {
                 //if the square is empty spawn a move plate
-                MovePlateSpawn(x, y);
+                MovePlateSpawn(x, y, pieceObject);
             }
             else if (cp.GetComponent<Chessman>().player != player)
             {
                 if (cp.name != "white_king" && cp.name != "black_king")
                 {
-                    MovePlateAttackSpawn(x, y);
+                    MovePlateAttackSpawn(x, y, pieceObject);
                 }
             }
         }
     }
 
-    public void WhitePawnDoubleMovePlate(int x, int y)
+    public void WhitePawnDoubleMovePlate(int x, int y, GameObject pieceObject)
     {
         Game sc = controller.GetComponent<Game>();
         if (sc.PositionOnBoard(x, y))
@@ -287,12 +333,12 @@ public class Chessman : MonoBehaviour
             if (sc.GetPosition(x, y) == null && sc.GetPosition(x, y - 1) == null)
             {
                 //spawns in move plate if the square is empty
-                MovePlateSpawn(x, y);
+                MovePlateSpawn(x, y, pieceObject);
             }
         }
     }
 
-    public void BlackPawnDoubleMovePlate(int x, int y)
+    public void BlackPawnDoubleMovePlate(int x, int y, GameObject pieceObject)
     {
         Game sc = controller.GetComponent<Game>();
         if (sc.PositionOnBoard(x, y))
@@ -300,12 +346,12 @@ public class Chessman : MonoBehaviour
             if (sc.GetPosition(x, y) == null && sc.GetPosition(x, y + 1) == null)
             {
                 //spawns in move plate if the square is empty
-                MovePlateSpawn(x, y);
+                MovePlateSpawn(x, y, pieceObject);
             }
         }
     }
 
-    public void PawnMovePlate(int x, int y)
+    public void PawnMovePlate(int x, int y, GameObject pieceObject)
     {
         Game sc = controller.GetComponent<Game>();
         if (sc.PositionOnBoard(x, y))
@@ -313,7 +359,7 @@ public class Chessman : MonoBehaviour
             //spawns in move plate if the square is empty
             if (sc.GetPosition(x, y) == null)
             {
-                MovePlateSpawn(x, y);
+                MovePlateSpawn(x, y, pieceObject);
             }
 
             //chacks for pieces and spawns in a red move plate if there are pieces
@@ -324,7 +370,7 @@ public class Chessman : MonoBehaviour
 
                 if (cp.name != "white_king" && cp.name != "black_king")
                 {
-                    MovePlateAttackSpawn(x + 1, y);
+                    MovePlateAttackSpawn(x + 1, y, pieceObject);
                 }
             }
 
@@ -334,7 +380,7 @@ public class Chessman : MonoBehaviour
 
                 if (cp.name != "white_king" && cp.name != "black_king")
                 {
-                    MovePlateAttackSpawn(x - 1, y);
+                    MovePlateAttackSpawn(x - 1, y, pieceObject);
                 }
             }
         }
@@ -411,7 +457,6 @@ public class Chessman : MonoBehaviour
         //if the square is empty a Check plate is spawned
         while (sc.PositionOnBoard(x, y) && sc.GetPosition(x, y) == null)
         {
-            //CheckPlateSpawn(x, y);
             x += xIncrement;
             y += yIncrement;
         }
@@ -532,7 +577,7 @@ public class Chessman : MonoBehaviour
     }
     #endregion
 
-    public void MovePlateSpawn(int matrixX, int matrixY)
+    public void MovePlateSpawn(int matrixX, int matrixY, GameObject pieceObject)
     {
         float x = matrixX;
         float y = matrixY;
@@ -547,9 +592,12 @@ public class Chessman : MonoBehaviour
         MovePlate mpScript = mp.GetComponent<MovePlate>();
         mpScript.SetReference(gameObject);
         mpScript.SetCoords(matrixX, matrixY);
+
+        AIMoveDetails aiMoveDetails = new AIMoveDetails(pieceObject, x, y, false);
+        GlobalVariables.AIMoveDetailsList.Add(aiMoveDetails);
     }
 
-    public void MovePlateAttackSpawn(int matrixX, int matrixY)
+    public void MovePlateAttackSpawn(int matrixX, int matrixY, GameObject pieceObject)
     {
 
         float x = matrixX;
@@ -566,5 +614,8 @@ public class Chessman : MonoBehaviour
         mpScript.attack = true;
         mpScript.SetReference(gameObject);
         mpScript.SetCoords(matrixX, matrixY);
+
+        AIMoveDetails aiMoveDetails = new AIMoveDetails(pieceObject, x, y, true);
+        GlobalVariables.AIMoveDetailsList.Add(aiMoveDetails);
     }
 }

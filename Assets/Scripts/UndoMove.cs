@@ -25,26 +25,27 @@ public class UndoMove
         GameObject cp = controller.GetComponent<Game>().GetPosition(EndXCoord, EndYCoord);
 
         Chessman chessman = cp.GetComponent<Chessman>();  
-        chessman.MovePlateSpawn(StartXCoord, StartYCoord);
+        chessman.MovePlateSpawn(StartXCoord, StartYCoord, cp);
 
         GameObject movePlateObject = GameObject.FindGameObjectWithTag("MovePlate");
         MovePlate movePlateScript = movePlateObject.GetComponent<MovePlate>();
+        GlobalVariables.Undo = true;
         movePlateScript.MakeMove(StartXCoord, StartYCoord, cp);
 
         //recreates the piece if one was taken
         if (move.PieceTaken != "none")
         {
             GameHelper gameHelper = new GameHelper();
-            ReCreatePiece(EndXCoord, EndYCoord, move.PieceTaken);
-            if (GlobalVariables.currentPlayer == "white")
+            string PieceColor = ReCreatePiece(EndXCoord, EndYCoord, move.PieceTaken);
+            if (PieceColor == "black")
             {
                 GlobalVariables.WhiteScore = GlobalVariables.WhiteScore - gameHelper.GetAdditionalScore(move.PieceTaken);
-                dataAccess.UpdateScore(GlobalVariables.WhiteScore, GlobalVariables.currentPlayer);
+                dataAccess.UpdateScore(GlobalVariables.WhiteScore, "white");
             }
             else
             {
                 GlobalVariables.BlackScore = GlobalVariables.BlackScore - gameHelper.GetAdditionalScore(move.PieceTaken);
-                dataAccess.UpdateScore(GlobalVariables.BlackScore, GlobalVariables.currentPlayer);
+                dataAccess.UpdateScore(GlobalVariables.BlackScore, "black");
             }
         }
 
@@ -74,34 +75,35 @@ public class UndoMove
         return RealYCoord;
     }
 
-    public void ReCreatePiece(int x, int y, string piece)
+    public string ReCreatePiece(int x, int y, string piece)
     {
         Chessman chessman = controller.GetComponent<Chessman>();
         Game game = controller.GetComponent<Game>();
 
-        string color = "";
         GameHelper gameHelper = new GameHelper();
-        if (GlobalVariables.currentPlayer == "white")
+
+        string pieceColor = piece.Substring(0, Math.Min(piece.Length, 5));
+        if (pieceColor == "black")
         {
-            color = "black";
             GameObject[] newPlayerBlackPiece = new GameObject[]
             {
-                game.Create(piece,x,y,color)
+                game.Create(piece,x,y,"black")
             };
-            
+
             game.playerBlack[gameHelper.CheckIfArrayLocationEmpty(game.playerBlack)] = newPlayerBlackPiece[0];
         }
-        else if (GlobalVariables.currentPlayer == "black")
+        else if (pieceColor == "white")
         {
-            color = "white";
             GameObject[] newPlayerWhitePiece = new GameObject[]
             {
-                game.Create(piece,x,y,color)
+                game.Create(piece,x,y,"white")
             };
-            
+
             game.playerWhite[gameHelper.CheckIfArrayLocationEmpty(game.playerWhite)] = newPlayerWhitePiece[0];
         }
         game.SetStartingPosition();
+
+        return pieceColor;
     }
 
     public Sprite PieceTypeConvert(string pieceName)
