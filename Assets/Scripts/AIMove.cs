@@ -122,6 +122,9 @@ public class AIMove
 
         GameObject cp = Controller.GetComponent<Game>().GetPosition(Piece.GetComponent<Chessman>().GetXBoard(), Piece.GetComponent<Chessman>().GetYBoard());
 
+        GlobalVariables.AIMovePieceStartXCoord = Piece.GetComponent<Chessman>().GetXBoard();
+        GlobalVariables.AIMovePieceStartYCoord = Piece.GetComponent<Chessman>().GetYBoard();
+
         Chessman chessman = cp.GetComponent<Chessman>();
         chessman.DestroyMovePlates();
 
@@ -132,5 +135,11 @@ public class AIMove
         GameObject movePlateObject = GameObject.FindGameObjectWithTag("MovePlate");
         MovePlate movePlateScript = movePlateObject.GetComponent<MovePlate>();
         movePlateScript.MakeMove(MovePlateXCoord, MovePlateYCoord, Piece);
+
+        GameHelper gameHelper = new GameHelper();
+
+        GlobalVariables.AIMovePlateXCoord = MovePlateXCoord;
+        GlobalVariables.AIMovePlateYCoord = MovePlateYCoord;
+        GlobalVariables.CurrentPiece = gameHelper.FixStringFormat(Piece.ToString());
     }
 }

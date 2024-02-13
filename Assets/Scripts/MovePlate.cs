@@ -26,6 +26,7 @@ public class MovePlate : MonoBehaviour
 
     public void OnMouseUp()
     {
+        GlobalVariables.Undo = false;
         MakeMove(matrixX, matrixY, reference);
         //Updates the Database
         GameHelper gameHelper = new GameHelper();
@@ -38,7 +39,10 @@ public class MovePlate : MonoBehaviour
         if (GlobalVariables.currentPlayer == "black" && GlobalVariables.Mode == "AI")
         {
             AIMove aiMove = new AIMove();
+            GlobalVariables.Undo = false;
             aiMove.MakeMove();
+            dataAccess.InsertMove(GlobalVariables.CurrentPiece, gameHelper.CompleteCoordinates(GlobalVariables.AIMovePieceStartXCoord.ToString(), GlobalVariables.AIMovePieceStartYCoord.ToString()),
+            gameHelper.CompleteCoordinates(GlobalVariables.AIMovePlateXCoord.ToString(), GlobalVariables.AIMovePlateYCoord.ToString()), GlobalVariables.GameId, GlobalVariables.CurrentPieceTaken);
         }
     }
 
@@ -46,7 +50,7 @@ public class MovePlate : MonoBehaviour
     {
         controller = GameObject.FindGameObjectWithTag("GameController");
         GameHelper gameHelper = new GameHelper();
-
+        bool breakIf = false;
         //checks if the king has been taken
         if (attack)
         {
@@ -59,12 +63,14 @@ public class MovePlate : MonoBehaviour
                 //if (cp.name == "black_king") controller.GetComponent<Game>().Winner("white");
 
                 gameHelper.UpdateScore(cp.name);
+                Debug.Log("Update Score" + cp.name);
 
                 //destroys pieces when taken
                 Destroy(cp);
                 GlobalVariables.CurrentPieceTaken = gameHelper.FixStringFormat(cp.ToString());
                 GlobalVariables.CurrentPieceTakenXCoord = x;
                 GlobalVariables.CurrentPieceTakenYCoord = y;
+                breakIf = true;
             }
         }
         else
@@ -72,16 +78,26 @@ public class MovePlate : MonoBehaviour
             //if there is no piece taken then CurrentPieceTaken is set to none
             GlobalVariables.CurrentPieceTaken = "none";
         }
-        if(GlobalVariables.currentPlayer == "black" && GlobalVariables.Mode == "AI")
+        if (GlobalVariables.Undo == false)
         {
-            if (GlobalVariables.AIMoveDetailsList[GlobalVariables.RandomNumber].Attack)
+            if (GlobalVariables.currentPlayer == "black" && GlobalVariables.Mode == "AI" && breakIf == false)
             {
-                GameObject cp = controller.GetComponent<Game>().GetPosition(x, y);
-                Destroy(cp);
-                //Debug.Log("Destroy"+cp.ToString());
-                GlobalVariables.CurrentPieceTaken = gameHelper.FixStringFormat(cp.ToString());
-                GlobalVariables.CurrentPieceTakenXCoord = x;
-                GlobalVariables.CurrentPieceTakenYCoord = y;
+                if (GlobalVariables.AIMoveDetailsList[GlobalVariables.RandomNumber].Attack)
+                {
+                    GameObject cp = controller.GetComponent<Game>().GetPosition(x, y);
+                    gameHelper.UpdateScore(cp.name);
+                    Debug.Log("BlackAI Update Score" + cp.name);
+                    Destroy(cp);
+                    //Debug.Log("Destroy"+cp.ToString());
+                    GlobalVariables.CurrentPieceTaken = gameHelper.FixStringFormat(cp.ToString());
+                    GlobalVariables.CurrentPieceTakenXCoord = x;
+                    GlobalVariables.CurrentPieceTakenYCoord = y;
+                }
+                else
+                {
+                    //if there is no piece taken then CurrentPieceTaken is set to none
+                    GlobalVariables.CurrentPieceTaken = "none";
+                }
             }
         }
 

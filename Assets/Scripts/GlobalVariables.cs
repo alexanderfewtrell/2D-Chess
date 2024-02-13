@@ -28,4 +28,12 @@ public class GlobalVariables : MonoBehaviour
     public static List<AIMoveDetails> AIMoveDetailsList = new List<AIMoveDetails>();
 
     public static int RandomNumber = 0;
+
+    public static int AIMovePlateXCoord = 0;
+    public static int AIMovePlateYCoord = 0;
+
+    public static int AIMovePieceStartXCoord = 0;
+    public static int AIMovePieceStartYCoord = 0;
+
+    public static bool Undo = true;
 }
