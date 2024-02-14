@@ -270,10 +270,10 @@ public class Chessman : MonoBehaviour
         {
             GameObject cp = controller.GetComponent<Game>().GetPosition(x, y);
 
-            if (cp.name != "white_king" && cp.name != "black_king")
-            {
-                MovePlateAttackSpawn(x, y, pieceObject);
-            }
+            //if (cp.name != "white_king" && cp.name != "black_king")
+            //{
+            MovePlateAttackSpawn(x, y, pieceObject);
+            //}
         }
     }
 
@@ -317,10 +317,10 @@ public class Chessman : MonoBehaviour
             }
             else if (cp.GetComponent<Chessman>().player != player)
             {
-                if (cp.name != "white_king" && cp.name != "black_king")
-                {
-                    MovePlateAttackSpawn(x, y, pieceObject);
-                }
+                //if (cp.name != "white_king" && cp.name != "black_king")
+                //{
+                MovePlateAttackSpawn(x, y, pieceObject);
+                //}
             }
         }
     }
@@ -368,20 +368,20 @@ public class Chessman : MonoBehaviour
             {
                 GameObject cp = controller.GetComponent<Game>().GetPosition(x + 1, y);
 
-                if (cp.name != "white_king" && cp.name != "black_king")
-                {
-                    MovePlateAttackSpawn(x + 1, y, pieceObject);
-                }
+                //if (cp.name != "white_king" && cp.name != "black_king")
+                //{
+                MovePlateAttackSpawn(x + 1, y, pieceObject);
+                //}
             }
 
             if (sc.PositionOnBoard(x - 1, y) && sc.GetPosition(x - 1, y) != null && sc.GetPosition(x - 1, y).GetComponent<Chessman>().player != player)
             {
                 GameObject cp = controller.GetComponent<Game>().GetPosition(x - 1, y);
 
-                if (cp.name != "white_king" && cp.name != "black_king")
-                {
-                    MovePlateAttackSpawn(x - 1, y, pieceObject);
-                }
+                //if (cp.name != "white_king" && cp.name != "black_king")
+                //{
+                MovePlateAttackSpawn(x - 1, y, pieceObject);
+                //}
             }
         }
     }
