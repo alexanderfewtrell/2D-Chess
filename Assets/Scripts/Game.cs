@@ -148,13 +148,20 @@ public class Game : MonoBehaviour
             gameOver = false;
 
             SceneManager.LoadScene("Game");
+            GlobalVariables.Mode = "2Player";
+            GameObject.FindGameObjectWithTag("AIToggleButtonTextTag").GetComponent<Text>().text = "Change to AI Mode";
+            GlobalVariables.currentPlayer = "white";
+            GlobalVariables.WhiteScore = 0;
+            GlobalVariables.WhiteScore = 0;
+            GameObject.FindGameObjectWithTag("WhiteScoreTag").GetComponent<Text>().text = GlobalVariables.WhiteScore.ToString();
+            GameObject.FindGameObjectWithTag("BlackScoreTag").GetComponent<Text>().text = GlobalVariables.BlackScore.ToString();
         }
 
         GameObject.FindGameObjectWithTag("WhiteScoreTag").GetComponent<Text>().text = GlobalVariables.WhiteScore.ToString();
         GameObject.FindGameObjectWithTag("BlackScoreTag").GetComponent<Text>().text = GlobalVariables.BlackScore.ToString();
     }
 
-    //if the king is taken it declares a winner and makes the text appear saying who the winner is
+    //if the king is taken it declares a winner and makes the text appear saying who the winner is 
     public void Winner(string playerWinner)
     {
         gameOver = true;

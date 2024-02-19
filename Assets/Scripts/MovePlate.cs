@@ -58,16 +58,26 @@ public class MovePlate : MonoBehaviour
 
             if (cp != null)
             {
-                //if (cp.name == "white_king") controller.GetComponent<Game>().Winner("black");
+                if (cp.name == "white_king")
+                {
+                    Destroy(cp);
+                    controller.GetComponent<Game>().Winner("black");
+                }
 
-                //if (cp.name == "black_king") controller.GetComponent<Game>().Winner("white");
-
-                gameHelper.UpdateScore(cp.name);
-                Destroy(cp);
-                GlobalVariables.CurrentPieceTaken = gameHelper.FixStringFormat(cp.ToString());
-                GlobalVariables.CurrentPieceTakenXCoord = x;
-                GlobalVariables.CurrentPieceTakenYCoord = y;
-                breakIf = true;
+                else if (cp.name == "black_king")
+                {
+                    Destroy(cp);
+                    controller.GetComponent<Game>().Winner("white");
+                }
+                else
+                {
+                    gameHelper.UpdateScore(cp.name);
+                    Destroy(cp);
+                    GlobalVariables.CurrentPieceTaken = gameHelper.FixStringFormat(cp.ToString());
+                    GlobalVariables.CurrentPieceTakenXCoord = x;
+                    GlobalVariables.CurrentPieceTakenYCoord = y;
+                    breakIf = true;
+                }
             }
         }
         else
@@ -82,11 +92,25 @@ public class MovePlate : MonoBehaviour
                 if (GlobalVariables.AIMoveDetailsList[GlobalVariables.RandomNumber].Attack)
                 {
                     GameObject cp = controller.GetComponent<Game>().GetPosition(x, y);
-                    gameHelper.UpdateScore(cp.name);
-                    Destroy(cp);
-                    GlobalVariables.CurrentPieceTaken = gameHelper.FixStringFormat(cp.ToString());
-                    GlobalVariables.CurrentPieceTakenXCoord = x;
-                    GlobalVariables.CurrentPieceTakenYCoord = y;
+                    if (cp.name == "white_king")
+                    {
+                        Destroy(cp);
+                        controller.GetComponent<Game>().Winner("black");
+                    }
+
+                    else if (cp.name == "black_king")
+                    {
+                        Destroy(cp);
+                        controller.GetComponent<Game>().Winner("white");
+                    }
+                    else
+                    {
+                        gameHelper.UpdateScore(cp.name);
+                        Destroy(cp);
+                        GlobalVariables.CurrentPieceTaken = gameHelper.FixStringFormat(cp.ToString());
+                        GlobalVariables.CurrentPieceTakenXCoord = x;
+                        GlobalVariables.CurrentPieceTakenYCoord = y;
+                    }
                 }
                 else
                 {
