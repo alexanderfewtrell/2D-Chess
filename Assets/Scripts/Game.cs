@@ -161,7 +161,7 @@ public class Game : MonoBehaviour
         GameObject.FindGameObjectWithTag("BlackScoreTag").GetComponent<Text>().text = GlobalVariables.BlackScore.ToString();
     }
 
-    //if the king is taken it declares a winner and makes the text appear saying who the winner is
+    //if the king is taken it declares a winner and makes the text appear saying who the winner is 
     public void Winner(string playerWinner)
     {
         gameOver = true;
