@@ -152,7 +152,7 @@ public class Game : MonoBehaviour
             GameObject.FindGameObjectWithTag("AIToggleButtonTextTag").GetComponent<Text>().text = "Change to AI Mode";
             GlobalVariables.currentPlayer = "white";
             GlobalVariables.WhiteScore = 0;
-            GlobalVariables.WhiteScore = 0;
+            GlobalVariables.BlackScore = 0;
             GameObject.FindGameObjectWithTag("WhiteScoreTag").GetComponent<Text>().text = GlobalVariables.WhiteScore.ToString();
             GameObject.FindGameObjectWithTag("BlackScoreTag").GetComponent<Text>().text = GlobalVariables.BlackScore.ToString();
         }

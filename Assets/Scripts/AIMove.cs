@@ -19,6 +19,7 @@ public class AIMove
     internal float XOffset = -2.45f;
     internal float YOffset = -2.35f;
 
+
     public void ChangeMode()
     {
         if (GlobalVariables.Mode == "2Player")
